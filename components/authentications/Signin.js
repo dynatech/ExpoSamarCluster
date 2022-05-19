@@ -1,25 +1,32 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Image, StyleSheet, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import { Formik } from 'formik';
-// import SweetAlert from 'react-native-sweet-alert';
 import CustomConfirm from '../utils/CustomConfirm';
 import CustomLoading from '../utils/CustomLoading';
-
-// comment for git push
+import MobileCaching from '../utils/MobileCaching';
+import axios from 'axios';
+import Config from 'react-native-config';
 
 const Signin = (props) => {
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
     const [userName, setUserName] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     
-
-
     const onClickSignin = () => {
 
     }
+
+    useEffect(() => {
+        MobileCaching.getItem('credentials').then(response => {
+            if (response) {
+                props.navigation.navigate('Drawer');
+            }
+        });
+    }, [props]);
 
     return(
         <Layout style={styles.container} level='1'>
@@ -46,15 +53,25 @@ const Signin = (props) => {
                 <Formik
                     initialValues={{username: '', password: ''}}
                     onSubmit={values => {
-                        setDisplayConfirm(true);
+                        setIsLoading(true);
                         if (values.username != "" && values.password != "") {
-                            setConfirmStatus("success");
-                            setConfirmDescription({
-                                title: 'Login Success!',
-                                caption: 'Click OK to Proceed to Dashboard'
-                            })
-                            setUserName(values.username);
-                         
+                            axios.post(`${Config.API_URL}/api/login`, {username: values.username, password: values.password}).then((response) => {
+                                if (response.data.ok == true) {
+                                    setIsLoading(false);
+                                    MobileCaching.setItem('credentials', response.data);
+                                    props.navigation.navigate('Drawer');
+                                } else {
+                                    setIsLoading(false);
+                                    setConfirmStatus("fail");
+                                    setConfirmDescription({
+                                        title: 'Sign in failed',
+                                        caption: response.data.message
+                                    })
+                                    setDisplayConfirm(true);
+                                }
+                            }).catch((error) => {
+                                console.log(error);
+                            });
                         }  else {
                             setConfirmStatus("fail");
                             setConfirmDescription({
@@ -62,9 +79,6 @@ const Signin = (props) => {
                                 caption: 'Incorrect username / password'
                             })
                         }
-
-                    
-                        
                     }}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -110,11 +124,13 @@ const Signin = (props) => {
                 setDisplayConfirm={setDisplayConfirm}
                 callback={(stat)=> {
                     setDisplayConfirm(false);
-                    if (stat === "success")
-                        props.navigation.navigate('Drawer', {username: userName});
-
-            }}/>
-            {/* <CustomLoading loading={true} /> */}
+                    setTimeout(()=> {
+                        if (stat === "success")
+                            props.navigation.navigate('Drawer');
+                    }, 3000);
+                }}
+            />
+            <CustomLoading loading={isLoading} />
         </Layout>
     )
 }

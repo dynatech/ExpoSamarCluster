@@ -73,11 +73,13 @@ const NavHeader = (props) => {
                 appearance='ghost'
                 status='info'
                 style={styles.button}
+                onPress={() => setVisible(true)}
                 accessoryRight={RenderProfileSetting}/>
             <Button
                 appearance='ghost'
                 status='info'
                 style={styles.button}
+                onPress={() => setOpenOverflowMenu(true)}
                 accessoryRight={RenderNotifications}/>
             <Button
                 appearance='ghost'

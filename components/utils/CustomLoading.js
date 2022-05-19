@@ -18,9 +18,9 @@ export default function CustomLoading(props) {
                     {
                         [...Array(3).keys()].map(index=> {
                             return <MotiView 
-                                        from={{opacity: 1, scale: 1}} 
-                                        animate={{opacity: 0, scale: 4}} 
-                                        transition={{ type: 'timing', duration: 2000, easing: Easing.out(Easing.ease)}}
+                                        from={{opacity: 0.7, scale: 1}} 
+                                        animate={{opacity: 0, scale: 10}} 
+                                        transition={{ type: 'timing', duration: 2000, loop: true, delay: index * 300}}
                                         key={index} 
                                         style={[StyleSheet.absoluteFillObject, styles.dot]}/>
                         })
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 40,
-        backgroundColor: '#6E01EF'
+        backgroundColor: '#f89422'
     }
 })

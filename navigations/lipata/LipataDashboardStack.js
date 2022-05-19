@@ -10,7 +10,6 @@ import SensorDataStack from './SensorDataStack';
 import EarlyWarningInformation from '../../components/lipata/EarlyWarningInformation/EarlyWarningInformation';
 import ActivitySchedule from '../../components/lipata/ActivitySchedule/ActivitySchedule';
 import CallNTextStack from './CallNTextStack';
-import Drawer from './Drawer';
 const Stack = createStackNavigator();
 
 function LipataDashboardStack(props) {
@@ -19,10 +18,10 @@ function LipataDashboardStack(props) {
         <Stack.Navigator>
             <Stack.Screen name="LipataDashboard" options={{
                 header: () => null
-            }} initialParams={{username:props.route.params.username}} component={LipataDashboard} />
+            }} component={LipataDashboard} />
             <Stack.Screen name="NavHeader" options={{
                 header: () => null
-            }} initialParams={{username:props.route.params.username}} component={NavHeader} />
+            }} component={NavHeader} />
             <Stack.Screen name="CRATabStack" options={{
                 header: () => null
             }} component={CommunityRiskAssessmentStack} />

@@ -3,16 +3,18 @@ import {StyleSheet, View, ScrollView, KeyboardAvoidingView } from 'react-native'
 import {Layout, Text, Input, Button} from '@ui-kitten/components';
 import {Formik } from 'formik';
 import CustomConfirm from '../utils/CustomConfirm';
+import CustomLoading from '../utils/CustomLoading';
 import ScreenHeader from '../utils/ScreenHeader';
-
+import axios from 'axios';
+import Config from "react-native-config";
 
 const Signup = (props) => {
 
     const [displayConfirm, setDisplayConfirm] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
     const [signupData, setSignupData] = useState(null);
-
 
     return(
         <Layout style={styles.container} level='1' >
@@ -28,18 +30,40 @@ const Signup = (props) => {
                             if (re.test(values.email)) {
                                 if (/\s/.test(values.username.trim()) != true) {
                                     if (values.password === values.confirmPassword) {
-                                        setConfirmStatus("success");
-                                        setConfirmDescription({
-                                            title: 'Sign up Success!',
-                                            caption: 'Proceed to Profile Creation'
-                                        })
-                                        setSignupData({...values})
+                                        setIsLoading(true);
+                                        setTimeout(()=> {
+                                            axios.post(`${Config.API_URL}/api/validate_username`, {username: values.username}).then((response) => {
+                                                if (response.data.status) {
+                                                    setIsLoading(false);
+                                                    props.navigation.navigate('ProfileSettings', {...values, isSignup: true});
+                                                } else {
+                                                    setIsLoading(false);
+                                                    setConfirmStatus("fail");
+                                                    setConfirmDescription({
+                                                        title: 'Sign up failed',
+                                                        caption: response.data.message
+                                                    })
+                                                    setDisplayConfirm(true);
+                                               }
+                                               setIsLoading(false);
+                                            }).catch((error) => {
+                                                setIsLoading(false);
+                                                setConfirmStatus("fail");
+                                                setConfirmDescription({
+                                                    title: 'Sign up failed',
+                                                    caption: 'Invalid API Request. Please contact the developers.'
+                                                })
+                                                setDisplayConfirm(true);
+                                            });
+                                        }, 4000);
+                                        
                                     } else {
                                         setConfirmStatus("fail");
                                         setConfirmDescription({
                                             title: 'Sign up failed',
                                             caption: 'Mismatched password'
                                         })
+                                        setDisplayConfirm(true);
                                     }
                                 } else {
                                     setConfirmStatus("fail");
@@ -47,6 +71,7 @@ const Signup = (props) => {
                                         title: 'Sign up failed',
                                         caption: 'Invalid Username'
                                     })
+                                    setDisplayConfirm(true);
                                 }
                             } else {
                                 setConfirmStatus("fail");
@@ -54,9 +79,8 @@ const Signup = (props) => {
                                     title: 'Sign up failed',
                                     caption: 'Invalid Email Address'
                                 })
+                                setDisplayConfirm(true);
                             }
-
-                            setDisplayConfirm(true);
                         }}
                     >
                         {({ handleChange, handleSubmit, values }) => (
@@ -106,6 +130,7 @@ const Signup = (props) => {
                 </Layout>
                 </ScrollView>
             </KeyboardAvoidingView>
+            <CustomLoading loading={isLoading} />
             <CustomConfirm 
                 title={confirmDescription.title}
                 caption={confirmDescription.caption}

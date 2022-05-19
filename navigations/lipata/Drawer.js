@@ -24,7 +24,7 @@ const Drawer = (props) => {
       }}>
         <Draws.Screen name="Dashboard" options={{
                 header: () => null
-            }} initialParams={{username:props.route.params.username}} component={LipataDashboardStack} />
+          }} component={LipataDashboardStack} />
         <Draws.Screen name="ProfileSettings" options={{
                 header: () => null
             }}  component={ProfileSettings} />
@@ -34,7 +34,7 @@ const Drawer = (props) => {
         <Draws.Screen name="Preference" options={{
                 header: () => null
             }} component={Preference} />
-        <Draws.Screen name="Signout" options={{
+        <Draws.Screen name="Sign out" options={{
             header: () => null
         }} component={Signout} />
       </Draws.Navigator>

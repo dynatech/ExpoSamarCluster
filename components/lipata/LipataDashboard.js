@@ -4,39 +4,18 @@ import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import NavHeader from '../utils/NavHeader';
 import SiteSummary from '../utils/SiteSummary';
-// import { Notifications } from 'react-native-notifications';
+import MobileCaching  from '../utils/MobileCaching';
 
 const LipataDashboard = (props) => {
     const StackNavigator = props.navigation;
     const [ userName, setUserName ] = useState("");
 
-    // useEffect(()=>{
-    //     Notifications.registerRemoteNotifications();
-
-    //     Notifications.events().registerNotificationReceivedForeground((notification: Notifications, completion) => {
-    //         const payload = notification.payload;
-    //         console.log(`Notification received in foreground: ${payload['gcm.notification.title']} : ${payload['gcm.notification.body']}`);
-
-    //         Notifications.postLocalNotification({
-    //             title: payload['gcm.notification.title'],
-    //             body: payload['gcm.notification.body'],
-    //             extra: "data"
-    //         });
-
-    //         completion({alert: false, sound: false, badge: false});
-    //     });
-    
-    //     Notifications.events().registerNotificationOpened((notification: Notifications, completion) => {
-    //       console.log(`Notification opened: ${notification.payload}`);
-    //       completion();
-    //     });
-    // }, []);
-
     useEffect(() => {
-        if (props.route.params) {
-            // console.log(props.route.params.username)
-            setUserName(props.route.params.username)
-         }
+        MobileCaching.getItem('credentials').then(response => {
+            if (response) {
+                setUserName(response.data.user.nickname.charAt(0).toUpperCase() + response.data.user.nickname.slice(1));
+            }
+        });
     }, [props])
 
     return(

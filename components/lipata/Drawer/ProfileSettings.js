@@ -5,6 +5,10 @@ import ScreenHeader from '../../utils/ScreenHeader';
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment';
 import CustomLoading from '../../utils/CustomLoading';
+import CustomConfirm from '../../utils/CustomConfirm';
+import axios from 'axios';
+import Config from "react-native-config";
+import MobileCaching from '../../utils/MobileCaching';
 
 const ProfileSettings = (props) => {
 
@@ -23,7 +27,6 @@ const ProfileSettings = (props) => {
         {designation: "Community"}
     ]
 
-
     const [openCalendar, setOpenCalendar] = useState(false);
     const [datetimestamp, setDateTimestamp] = useState(new Date())
     const [selectedGender, setSelectedGender] = useState(0);
@@ -37,6 +40,11 @@ const ProfileSettings = (props) => {
         designation: DESIGNATION_LIST[selectedDesignation].designation,
         address: ""
     });
+
+    const [isLoading, setLoading] = useState(false);
+    const [displayConfirm, setDisplayConfirm] = useState(false);
+    const [confirmStatus, setConfirmStatus] = useState("success");
+    const [confirmDescription, setConfirmDescription] = useState({});
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
@@ -52,7 +60,7 @@ const ProfileSettings = (props) => {
 
     return(
         <Fragment>
-            <ScreenHeader title="Profile Settings"/>
+            <ScreenHeader title={`Profile ${props.route.params.isSignup === true ? 'Details' : 'Settings'}`}/>
             <ScrollView>
                 <Layout style={styles.container} level='1'>
                     <Layout>
@@ -144,11 +152,44 @@ const ProfileSettings = (props) => {
                             values={profileSetting.address}
                             label={evaProps => <Text {...evaProps}>Address</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
-                            onChangeText={(e)=> profileSetting.address}
+                            onChangeText={(e)=> setProfileSetting({...profileSetting, address: e})}
                         />
                     </Layout>
                     <Layout style={{padding: 20}}>
-                        <Button status="info" style={{width: '100%'}} onPress={()=> {console.log(profileSetting)}}>
+                        <Button status="info" style={{width: '100%'}} onPress={()=> {
+                            setLoading(true);
+                            setTimeout(()=> {
+                                setLoading(false);
+                                if (props.route.params.isSignup) {
+                                    let data = {
+                                        ...profileSetting,
+                                        kaarawan: moment(profileSetting.kaarawan).format("YYYY-MM-DD"),
+                                        site_id: 24
+                                    }
+                                    axios.post(`${Config.API_URL}/api/signup`, data).then((response) => {
+                                        axios.post(`${Config.API_URL}/api/login`, response.data).then((response) => {
+                                            if (response.data.ok == true) {
+                                                MobileCaching.setItem('credentials', response.data);
+                                                props.navigation.navigate('Drawer');
+                                            } else {
+                                                setConfirmStatus("fail");
+                                                setConfirmDescription({
+                                                    title: 'Sign up failed',
+                                                    caption: response.data.message
+                                                })
+                                                setDisplayConfirm(true);
+                                            }
+                                        }).catch((error) => {
+                                            console.log(error);
+                                        });
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    });
+                                } else {
+                                    // Settings only
+                                }
+                            }, 3000);
+                            }}>
                             <Text>Save profile</Text>
                         </Button>
                     </Layout>
@@ -167,7 +208,23 @@ const ProfileSettings = (props) => {
                     setOpenCalendar(false)
                 }}
             />
-            <CustomLoading loading={true} />
+            <CustomLoading loading={isLoading} />
+            {
+                props.route.params.isSignup &&
+                <CustomConfirm 
+                    title={confirmDescription.title}
+                    caption={confirmDescription.caption}
+                    displayConfirm={displayConfirm}
+                    confirmStatus={confirmStatus}
+                    setDisplayConfirm={setDisplayConfirm}
+                    callback={(stat)=> {
+                        setDisplayConfirm(false);
+                        if (stat === "success") {
+                            
+                        }
+                    }}
+                />
+            }
         </Fragment>
     )
 }

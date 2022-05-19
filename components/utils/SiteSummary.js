@@ -8,12 +8,20 @@ import moment from 'moment';
 const SiteSummary = (props) => {
     
     const [tempDate, setTempDate] = useState("");
+    const mountedRef = useRef(true)
 
     useEffect(() => {
-            setInterval(() => {
-                const currentDate = new Date()
-                setTempDate(moment(currentDate).format("LL hh:mm:ss A"))
-            }, 1000)
+        setInterval(() => {
+            if (!mountedRef.current) return null
+            const currentDate = new Date()
+            setTempDate(moment(currentDate).format("LL hh:mm:ss A"))
+        }, 1000)
+    },[])
+
+    useEffect(() => {
+        return () => { 
+          mountedRef.current = false
+        }
     }, [])
    
     return(
@@ -34,7 +42,7 @@ const styles = StyleSheet.create({
         height: 150,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: 20,
     },
     layout: {
       flex: 1,

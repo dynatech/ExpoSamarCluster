@@ -1,13 +1,22 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Button } from '@ui-kitten/components';
+import CustomLoading from '../../utils/CustomLoading';
+import MobileCaching from '../../utils/MobileCaching';
 
 const Signout = (props) => {
+
+    const [isLoading, setLoading] = useState(false);
     useEffect(()=> {
-        props.navigation.navigate('Signin');
+        setLoading(true);
+        setTimeout(()=> {
+            MobileCaching.setItem('credentials', null);
+            props.navigation.navigate('Signin');
+            setLoading(false);
+        }, 3000);
     }, []);
     return(
-        <Fragment />
+        <CustomLoading loading={isLoading} />
     )
 }
 

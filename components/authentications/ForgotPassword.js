@@ -15,7 +15,7 @@ const ForgotPassword = (props) => {
     const ResendCode = () => {
         return(
             console.log("Pressed")
-            
+
         )
     }
 
@@ -90,13 +90,11 @@ const ForgotPassword = (props) => {
                             label={evaProps => <Text {...evaProps}>Confirm New Password</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             />
+                        <Text style={[styles.input, styles.link]} onPress={() => {
+                            
+                        }}>Did not receive OTP? Resend.</Text>
                         <Layout style={styles.button}>
                             <Button status="info" onPress={() => ("")}>Submit</Button>
-                        </Layout> 
-                        <Layout style={styles.button}>
-                            <Button status="info" onPress={()=> {console.log ("pressed");
-                                props.navigation.navigate('ForgotPassword');
-                            }}>Get another OTP</Button>
                         </Layout> 
                     </View>
                 </Fragment> 
@@ -151,6 +149,11 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 5,
         textAlign: 'center'
+    },
+    link: {
+        fontStyle: 'italic',
+        textDecorationLine: 'underline',
+        color: '#F8991D'
     },
     inputGroup: {
         padding: 20,

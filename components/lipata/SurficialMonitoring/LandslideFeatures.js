@@ -162,8 +162,8 @@ const LandslideFeatures = () => {
                                 selectedIndex={selectedFeatureIndex}
                                 onSelect={index => setSelectedFeatureIndex(index)}>
                                     {
-                                        feature_list.map((row)=> (
-                                            <SelectItem title={row.feature} value={row.feature}/>
+                                        feature_list.map((row, index)=> (
+                                            <SelectItem key={index} title={row.feature} value={row.feature}/>
                                         ))
                                     }
                             </Select>
@@ -229,8 +229,8 @@ const LandslideFeatures = () => {
                             <ScrollView horizontal={true}>
                                 {
                                     imageFiles.length > 0 ?
-                                        imageFiles.map((image)=> (
-                                            <TouchableOpacity style={{padding: 5, marginBottom: 10}}
+                                        imageFiles.map((image, index)=> (
+                                            <TouchableOpacity key={index} style={{padding: 5, marginBottom: 10}}
                                                 onPress={()=> {
                                                     handleImageViewer(image)
                                                 }}>
