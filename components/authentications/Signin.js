@@ -31,12 +31,14 @@ const Signin = (props) => {
     }, [props]);
 
     useEffect(()=> {
-        MobileCaching.getItem('allowed').then(response => {
-            if (response == null || response == true) {
-                e.preventDefault();
-            } else {
-                StackNavigator.dispatch(e.data.action)
-            }
+        StackNavigator.addListener('beforeRemove', (e) => {
+            MobileCaching.getItem('allowed').then(response => {
+                if (response == null || response == true) {
+                    e.preventDefault();
+                } else {
+                    StackNavigator.dispatch(e.data.action)
+                }
+            });
         });
     },[StackNavigator]);
 

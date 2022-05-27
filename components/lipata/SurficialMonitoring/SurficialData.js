@@ -15,7 +15,7 @@ const SurficialData = () => {
                 <Layout style={styles.layout}>
                     <Text category="p1" style={{textAlign: 'center'}}>Latest Surficial Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
                 </Layout>
-                <Layout style={styles.image_container}>
+                <Layout style={styles.graph_container}>
                     <SurficialGraph data={surficialData}/>
                     {/* <TouchableHighlight onPress={()=> setMapView(true)}>
                        <CustomProgressiveImage 
@@ -77,5 +77,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    graph_container: {
+        height: 300,
+        width: 350
     }
 });
