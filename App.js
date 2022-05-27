@@ -19,6 +19,7 @@ const App = () => {
   const responseListener = useRef();
 
 
+
   // registerForPushNotificationsAsync = async () => {
   //   if (Device.isDevice) {
   //     const { status: existingStatus } = await Notifications.getPermissionsAsync();

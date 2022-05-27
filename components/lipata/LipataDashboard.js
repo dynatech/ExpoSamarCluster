@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Image, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
 import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import NavHeader from '../utils/NavHeader';
@@ -16,7 +16,37 @@ const LipataDashboard = (props) => {
                 setUserName(response.data.user.nickname.charAt(0).toUpperCase() + response.data.user.nickname.slice(1));
             }
         });
-    }, [props])
+    }, [props]);
+
+
+    useEffect(() =>
+    {
+        StackNavigator.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+            MobileCaching.getItem('fromSignout').then(response => {
+                if (response) {
+                    MobileCaching.setItem('fromSignout', null);
+                    StackNavigator.dispatch(e.data.action)
+                } else {
+                    Alert.alert(
+                        'Do you want to Sign out?',
+                        'Stored credentials will be removed.',
+                        [
+                        { text: "Don't leave", style: 'cancel', onPress: () => {} },
+                        {
+                            text: 'Logout',
+                            style: 'destructive',
+                            onPress: () => {
+                                MobileCaching.setItem('credentials', null);
+                                StackNavigator.dispatch(e.data.action)
+                            },
+                        },
+                        ]
+                    );
+                }
+            });
+        })
+    },[StackNavigator, props]);
 
     return(
         <Layout style={styles.container} level='1'>

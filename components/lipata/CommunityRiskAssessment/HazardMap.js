@@ -20,14 +20,14 @@ const HazardMap = () => {
                 <Layout style={styles.image_container}>
                     <TouchableHighlight onPress={()=> setMapView(true)}>
                        <CustomProgressiveImage 
-                            source={require('../../../hazard_maps/LPA_DSL_Hazard_Map.jpg')}
+                            source={{uri: 'http://192.168.150.191:5000/storage/lpa/LPA_DSL_Hazard_Map.jpg'}}
                             style={ImageStyle.hazard_maps}
                             resizeMode="cover"
                        />
                     </TouchableHighlight>
                 </Layout>
                 <Button status="info" onPress={()=> {
-                    console.log("DOWNLOAD")
+                    
                 }}>Download</Button>
             </Layout>
             <Modal visible={mapView}

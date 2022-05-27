@@ -25,7 +25,7 @@ const Drawer = (props) => {
         <Draws.Screen name="Dashboard" options={{
                 header: () => null
           }} component={LipataDashboardStack} />
-        <Draws.Screen name="ProfileSettings" options={{
+        <Draws.Screen name="Profile Settings" options={{
                 header: () => null
             }}  component={ProfileSettings} />
         <Draws.Screen name="Feedback" options={{

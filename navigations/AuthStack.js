@@ -6,6 +6,7 @@ import Signin from '../components/authentications/Signin';
 import Signup from '../components/authentications/Signup';
 import Drawer from './lipata/Drawer';
 import ProfileSettings from '../components/lipata/Drawer/ProfileSettings';
+import SplashScreen from '../components/utils/SplashScreen';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,9 @@ function AuthStack() {
     return(
         <NavigationContainer>
             <Stack.Navigator>
+                <Stack.Screen name="SplashScreen" options={{
+                    header: () => null
+                }} component={SplashScreen} />
                 <Stack.Screen name="Signin" options={{
                     header: () => null
                 }} component={Signin} />

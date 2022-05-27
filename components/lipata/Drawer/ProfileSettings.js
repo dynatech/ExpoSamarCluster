@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { StyleSheet, BackHandler, View, ScrollView} from 'react-native';
-import { Layout, Text, Input, Button, Select, SelectItem, Icon } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Select, SelectItem, Icon, IndexPath } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment';
@@ -11,7 +11,6 @@ import Config from "react-native-config";
 import MobileCaching from '../../utils/MobileCaching';
 
 const ProfileSettings = (props) => {
-
 
     const GENDER_LIST = [
         {gender: 'Male'},
@@ -29,15 +28,15 @@ const ProfileSettings = (props) => {
 
     const [openCalendar, setOpenCalendar] = useState(false);
     const [datetimestamp, setDateTimestamp] = useState(new Date())
-    const [selectedGender, setSelectedGender] = useState(0);
-    const [selectedDesignation, setSelectedDesignation] = useState(0);
+    const [selectedGender, setSelectedGender] = useState(new IndexPath(0));
+    const [selectedDesignation, setSelectedDesignation] = useState(new IndexPath(0));
     const [profileSetting, setProfileSetting] = useState({
         firstname: "",
         lastname: "",
         middlename: "",
-        gender: GENDER_LIST[selectedGender].gender,
+        gender: GENDER_LIST[selectedGender.row].gender,
         kaarawan: new Date(),
-        designation: DESIGNATION_LIST[selectedDesignation].designation,
+        designation: DESIGNATION_LIST[selectedDesignation.row].designation,
         address: ""
     });
 
@@ -45,6 +44,8 @@ const ProfileSettings = (props) => {
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
+
+    const [isSignup, setIsSignup] = useState(false);
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
@@ -55,19 +56,40 @@ const ProfileSettings = (props) => {
     }
 
     useEffect(()=> {
-        setProfileSetting({...profileSetting, ...props.route.params});
-    }, [props]);
+        if (props.route.params) {
+            if (props.route.params.isSignup) {
+                setIsSignup(true);
+                setProfileSetting({...profileSetting, ...props.route.params});
+            }
+        } else {
+            MobileCaching.getItem('credentials').then(response => {
+                if (response) {
+                    setProfileSetting({
+                        id: response.data.user.user_id,
+                        firstname: response.data.user.first_name,
+                        lastname: response.data.user.last_name,
+                        middlename: response.data.user.middle_name,
+                        gender: response.data.user.sex,
+                        designation: '',
+                        kaarawan: new Date(response.data.user.birthday),
+                        address: response.data.profile.address
+                    });
+                    setSelectedGender(new IndexPath(GENDER_LIST.findIndex(o => o.gender == response.data.user.sex)));
+                }
+            });
+        }
+    }, []);
 
     return(
         <Fragment>
-            <ScreenHeader title={`Profile ${props.route.params.isSignup === true ? 'Details' : 'Settings'}`}/>
+            <ScreenHeader title={`Profile ${isSignup && isSignup === true ? 'Details' : 'Settings'}`}/>
             <ScrollView>
                 <Layout style={styles.container} level='1'>
                     <Layout>
                         <Input
                             style={styles.input}
                             placeholder='E.g. Juan'
-                            values={profileSetting.firstname}
+                            value={profileSetting.firstname}
                             label={evaProps => <Text {...evaProps}>Firstname</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, firstname: e})}
@@ -77,7 +99,7 @@ const ProfileSettings = (props) => {
                         <Input
                             style={styles.input}
                             placeholder='E.g. Dela Cruz'
-                            values={profileSetting.lastname}
+                            value={profileSetting.lastname}
                             label={evaProps => <Text {...evaProps}>Lastname</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, lastname: e})}
@@ -87,7 +109,7 @@ const ProfileSettings = (props) => {
                         <Input
                             style={styles.input}
                             placeholder='E.g. Tamayo'
-                            values={profileSetting.middlename}
+                            value={profileSetting.middlename}
                             label={evaProps => <Text {...evaProps}>Middlename</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, middlename: e})}
                         />
@@ -99,11 +121,11 @@ const ProfileSettings = (props) => {
                                     placeholder="             "
                                     label={evaProps => <Text {...evaProps}>Gender:</Text>}
                                     caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    value={selectedGender && GENDER_LIST[selectedGender.row].gender}
+                                    value={selectedGender && GENDER_LIST[selectedGender-1].gender}
                                     selectedIndex={selectedGender}
                                     onSelect={index => {
                                         setSelectedGender(index)
-                                        setProfileSetting({...profileSetting, gender: GENDER_LIST[index-1].gender})
+                                        setProfileSetting({...profileSetting, gender: GENDER_LIST[index.row].gender})
                                     }}>
                                         {
                                             GENDER_LIST.map((row, index)=> (
@@ -118,11 +140,11 @@ const ProfileSettings = (props) => {
                                     placeholder="             "
                                     label={evaProps => <Text {...evaProps}>Designation:</Text>}
                                     caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    value={selectedDesignation && DESIGNATION_LIST[selectedDesignation.row].designation}
+                                    value={selectedDesignation && DESIGNATION_LIST[selectedDesignation-1].designation}
                                     selectedIndex={selectedDesignation}
                                     onSelect={index => {
                                         setSelectedDesignation(index)
-                                        setProfileSetting({...profileSetting, designation: DESIGNATION_LIST[index-1].designation})
+                                        setProfileSetting({...profileSetting, designation: DESIGNATION_LIST[index.row].designation})
                                     }}>
                                         {
                                             DESIGNATION_LIST.map((row, index)=> (
@@ -149,7 +171,7 @@ const ProfileSettings = (props) => {
                             style={styles.input}
                             textStyle={{ minHeight: 100 }}
                             placeholder='E.g. Luneta, Manila'
-                            values={profileSetting.address}
+                            value={profileSetting.address}
                             label={evaProps => <Text {...evaProps}>Address</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, address: e})}
@@ -160,7 +182,7 @@ const ProfileSettings = (props) => {
                             setLoading(true);
                             setTimeout(()=> {
                                 setLoading(false);
-                                if (props.route.params.isSignup) {
+                                if (isSignup) {
                                     let data = {
                                         ...profileSetting,
                                         kaarawan: moment(profileSetting.kaarawan).format("YYYY-MM-DD"),
@@ -210,7 +232,7 @@ const ProfileSettings = (props) => {
             />
             <CustomLoading loading={isLoading} />
             {
-                props.route.params.isSignup &&
+                props.route.params != undefined && props.route.params.isSignup &&
                 <CustomConfirm 
                     title={confirmDescription.title}
                     caption={confirmDescription.caption}

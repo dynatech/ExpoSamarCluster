@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { StyleSheet, Dimensions, KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import { Layout, Input, Text, Card, Button, Icon, Modal } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
@@ -10,6 +10,10 @@ import { DataTable } from 'react-native-paper';
 const optionsPerPage = [10, 30, 50];
 
 const FamilyRiskProfile = () => {
+    const [scrollToIndex, setScrollToIndex] = useState(0);
+    const [dataSourceCords, setDataSourceCords] = useState([]);
+    const [ref, setRef] = useState(null);
+
     const [page, setPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
     const [profileMembers, setProfileMembers] = useState([
@@ -23,6 +27,20 @@ const FamilyRiskProfile = () => {
             birthdate: '',
             misc: ''}
     ]);
+
+    let profileMembers_ = useRef([
+        {
+            uid: uuid.v4(),
+            household_id: '',
+            risk_type: '',
+            household_head: '',
+            gender: '',
+            age: '',
+            birthdate: '',
+            misc: ''}
+    ])
+
+    const [member, setMember] = useState({});
     const [showDataTable, setShowDataTable] = useState(false);
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
@@ -30,6 +48,15 @@ const FamilyRiskProfile = () => {
     useEffect(()=> {
         setPage(0);
     }, [itemsPerPage]);
+    
+
+    useEffect(()=> {
+        console.log("profileMembers:", profileMembers);
+    }, [profileMembers]);
+
+    useEffect(()=> {
+        console.log("dataSourceCords:", dataSourceCords);
+    }, [dataSourceCords]);
 
     const AddIcon = () => (
         <Icon name='plus-square-outline' {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 20}}} />
@@ -41,112 +68,243 @@ const FamilyRiskProfile = () => {
 
     const DownloadIcon = () => (
         <Icon name='download-outline' {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 20}}} />
-    )
+    );
+
+    const scrollHandler = (coords) => {
+        if (coords) {
+            ref.scrollTo({
+                x: 0,
+                y: coords[coords.length-1],
+                animated: true,
+              });
+        } else {
+            console.log(coords)
+        }
+      };
+     
+
+    const validateMember = (value, key, temp) => {
+        let isValid = true;
+        switch(key) {
+            case "household_id":
+                if (value.trim() != "") {
+                    temp['household_id'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "risk_type":
+                if (value.trim() != "") {
+                    temp['risk_type'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "household_head":
+                if (value.trim() != "") {
+                    temp['household_head'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "household_member":
+                if (value.trim() != "") {
+                    temp['household_member'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "gender":
+                if (value.trim() != "") {
+                    temp['gender'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "age":
+                if (value.trim() != "") {
+                    temp['age'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "birthdate":
+                if (value.trim() != "") {
+                    temp['birthdate'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            case "misc":
+                if (value.trim() != "") {
+                    temp['misc'] = value;
+                } else {
+                    isValid = false;
+                }
+                break;
+            default:
+                isValid = false;
+                break;
+        }
+
+        if (
+            "household_id" in temp &&
+            "risk_type" in temp &&
+            "gender" in temp &&
+            "age" in temp &&
+            "birthdate" in temp &&
+            "misc" in temp &&
+            (
+                "household_head" in temp || "household_member" in temp
+            )
+        ) {
+            if (isValid) {
+                let index = profileMembers_.current.findIndex(o => o.uid == temp.uid);
+                profileMembers_.current[index] = temp;
+            }
+        }
+    }
 
     const RenderPrimaryHouseholdInput = (props) => {
-        const { head } = props;
+        const { index, head, member } = props;
         const uid = uuid.v4();
+        let temp = { uid: profileMembers_.current[index] ? profileMembers_.current[index].uid : uid}
+
         return(
             <Card style={styles.card} key={uid}
                 status={head ? 'primary' : 'warning'} 
-                header={Header({type: head ? 1 : 2, uid: props.member ? props.member.uid : uid})}>
-                    <Fragment>
-                        <Layout style={styles.input_container}>
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.household_id}
-                                    label={evaProps => <Text {...evaProps}>Household ID</Text>}
-                                    caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    onChangeText={handleChange('household_id')}
-                                    onBlur={handleBlur('household_id')}
-                                />
-                            </View>
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.risk_type}
-                                    label={evaProps => <Text {...evaProps}>Risk Type</Text>}
-                                    caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    onChangeText={handleChange('risk_type')}
-                                    onBlur={handleBlur('risk_type')}
-                                />
-                            </View>
-                            {
-                                head && 
-                                    <View>
-                                        <Input
-                                            style={styles.input}
-                                            placeholder='E.g. XXXYYYZZZ'
-                                            values={values.household_head}
-                                            label={evaProps => <Text {...evaProps}>Household Head</Text>}
-                                            caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                            onChangeText={handleChange('household_head')}
-                                            onBlur={handleBlur('household_head')}
-                                        />
-                                    </View>
-                            }
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.gender}
-                                    label={evaProps => <Text {...evaProps}>Kasarian</Text>}
-                                    caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    onChangeText={handleChange('gender')}
-                                    onBlur={handleBlur('gender')}
-                                />
-                            </View>
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.age}
-                                    label={evaProps => <Text {...evaProps}>Edad</Text>}
-                                    caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    onChangeText={handleChange('age')}
-                                    onBlur={handleBlur('age')}
-                                />
-                            </View>
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.birthdate}
-                                    label={evaProps => <Text {...evaProps}>Kapanganakan</Text>}
-                                    caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    onChangeText={handleChange('birthdate')}
-                                    onBlur={handleBlur('birthdate')}
-                                />
-                            </View>
-                            <View>
-                                <Input
-                                    style={styles.input}
-                                    placeholder='E.g. XXXYYYZZZ'
-                                    values={values.misc}
-                                    label={evaProps => <Text {...evaProps}>My Kapansanan, buntis, bata, etc...</Text>}
-                                    onChangeText={handleChange('misc')}
-                                    onBlur={handleBlur('misc')}
-                                />
-                            </View>
-                        </Layout>
-                    </Fragment>
+                header={Header({type: head ? 1 : 2, uid: profileMembers_.current[index] ? profileMembers_.current[index] : uid})}>
+                <Fragment>
+                    <Layout style={styles.input_container}>
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['household_id']}
+                                defaultValue={member.household_id}
+                                label={evaProps => <Text {...evaProps}>Household ID</Text>}
+                                caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                onChangeText={(e)=> {
+                                    validateMember(e, 'household_id', temp)
+                                }}
+                            />
+                        </View>
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['risk_type']}
+                                defaultValue={member.risk_type}
+                                label={evaProps => <Text {...evaProps}>Risk Type</Text>}
+                                caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                onChangeText={(e)=> {
+                                    validateMember(e, 'risk_type', temp)
+                                }}
+                            />
+                        </View>
+                        {
+                            head ?
+                                <View>
+                                    <Input
+                                        style={styles.input}
+                                        placeholder='E.g. XXXYYYZZZ'
+                                        value={temp['household_head']}
+                                        defaultValue={member.household_head}
+                                        label={evaProps => <Text {...evaProps}>Household Head</Text>}
+                                        caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                        onChangeText={(e)=> {
+                                            validateMember(e, 'household_head', temp);
+                                        }}
+                                    />
+                                </View>
+                            :
+                                <View>
+                                    <Input
+                                        style={styles.input}
+                                        placeholder='E.g. XXXYYYZZZ'
+                                        value={temp['household_member']}
+                                        defaultValue={member.household_member}
+                                        label={evaProps => <Text {...evaProps}>Household Member</Text>}
+                                        caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                        onChangeText={(e)=> {
+                                            validateMember(e, 'household_member', temp);
+                                            
+                                        }}
+                                    />
+                                </View>
+                        }
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['gender']}
+                                defaultValue={member.gender}
+                                label={evaProps => <Text {...evaProps}>Kasarian</Text>}
+                                caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                onChangeText={(e)=> {
+                                    validateMember(e, 'gender', temp);
+                                }}
+                            />
+                        </View>
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['age']}
+                                defaultValue={member.age}
+                                label={evaProps => <Text {...evaProps}>Edad</Text>}
+                                caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                onChangeText={(e)=> {
+                                    validateMember(e, 'age', temp);
+                                }}
+                            />
+                        </View>
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['birthdate']}
+                                defaultValue={member.birthdate}
+                                label={evaProps => <Text {...evaProps}>Kapanganakan</Text>}
+                                caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                onChangeText={(e)=> {
+                                    validateMember(e, 'birthdate', temp);
+                                }}
+                            />
+                        </View>
+                        <View>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. XXXYYYZZZ'
+                                value={temp['misc']}
+                                defaultValue={member.misc}
+                                label={evaProps => <Text {...evaProps}>My Kapansanan, buntis, bata, etc...</Text>}
+                                onChangeText={(e) => {
+                                    validateMember(e, 'misc', temp);
+                                }}
+                            />
+                        </View>
+                    </Layout>
+                </Fragment>
             </Card>
         )
     }
 
     const handleAdditionalMember = () => {
-        setProfileMembers([...profileMembers, {
+        let temp = [...profileMembers_.current];
+
+        temp.push({
             uid: uuid.v4(),
             household_id: '',
             risk_type: '',
-            household_head: '',
+            household_member: '',
             gender: '',
             age: '',
             birthdate: '',
-            misc: ''}]);
+            misc: ''
+        });
+        profileMembers_.current = temp;
+        setProfileMembers(temp)
     }
 
     const handleListSubmit = () => {
@@ -155,20 +313,20 @@ const FamilyRiskProfile = () => {
 
     const Header = (props) => (
         <View style={{}}>
-            <Layout style={{backgroundColor: 'red', width: '100%', flexDirection: 'row'}}>
-                <Layout style={{ width: props.type && props.type == 1 ? '100%': '60%' }}>
+            <Layout style={{width: '100%', flexDirection: 'row'}}>
+                <Layout style={{ width: props.type && props.type == 1 ? '60%': '60%' }}>
                     <Text category='h6'>{props.type && props.type == 1 ? 'Household Head' : 'Household Member'}</Text>
                     <Text category='s1'>{props.type && props.type == 1 ? 'Ulo ng Sambahayan' : 'Miyembro ng Sambahayan'}</Text>
                 </Layout>
                 {
                     props.type && props.type != 1 &&
-                    <Layout style={{ width: '40%' }}>
-                        <Button status="danger" onPress={()=> {
-                            let temp = [...profileMembers];
-                            temp.splice(temp.findIndex(x => x.uid === props.uid), 1);
-                            setProfileMembers(temp)
-                        }}>Remove</Button>
-                    </Layout>
+                        <Layout style={{ width: '40%' }}>
+                            <Button status="danger" onPress={()=> {
+                                let temp = [...profileMembers];
+                                temp.splice(temp.findIndex(x => x.uid === props.uid), 1);
+                                setProfileMembers(temp)
+                            }}>Remove</Button>
+                        </Layout>
                 }
             </Layout>
         </View>
@@ -183,14 +341,19 @@ const FamilyRiskProfile = () => {
                     style={{height: '100%'}}
                 >   
                     <Text style={{fontStyle: 'italic', textDecorationLine: 'underline'}} status="info" onPress={()=> setShowDataTable(true)}>View Family Risk Profile List here!</Text>
-                    <ScrollView>
-                        {/* <View style={{width: screenWidth-60}}>
-                            <RenderPrimaryHouseholdInput head={true}/>
-                        </View> */}
+                    <ScrollView ref={(ref) => {
+                        setRef(ref);
+                    }}>
                         {
                             profileMembers.map((member, index)=> (
-                                <View key={index} style={{width: screenWidth-60, marginTop: 20}}>
-                                    <RenderPrimaryHouseholdInput head={false} member={member}/>
+                                <View key={index} style={{width: screenWidth-60, marginTop: 20}}
+                                    onLayout={(event) => {
+                                        const layout = event.nativeEvent.layout;
+                                        dataSourceCords[index] = layout.y;
+                                        scrollHandler(dataSourceCords);
+                                    }}
+                                >
+                                   <RenderPrimaryHouseholdInput index={index} head={index == 0 ? true : false} member={member}/>
                                 </View>
                             ))
                         }
@@ -199,7 +362,9 @@ const FamilyRiskProfile = () => {
                 </KeyboardAvoidingView>
             </Layout>
             <ActionButton buttonColor="rgba(231,76,60,1)" style={{position: 'absolute', left: 0, right: -25, top: screenHeight - 109, }}>
-                <ActionButton.Item buttonColor='#16526D' title="Add another Household Member" onPress={() => handleAdditionalMember()}>
+                <ActionButton.Item buttonColor='#16526D' title="Add another Household Member" onPress={() => {
+                    handleAdditionalMember();
+                }}>
                     <AddIcon/>
                 </ActionButton.Item>
                 <ActionButton.Item buttonColor='#F8991D' title="Save Family Risk Profile" onPress={() => handleListSubmit()}>

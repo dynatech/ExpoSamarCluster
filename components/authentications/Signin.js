@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Image, StyleSheet, View, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, View, ScrollView, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
 import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import { Formik } from 'formik';
@@ -10,6 +10,8 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 const Signin = (props) => {
+    const StackNavigator = props.navigation;
+
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
@@ -27,6 +29,16 @@ const Signin = (props) => {
             }
         });
     }, [props]);
+
+    useEffect(()=> {
+        MobileCaching.getItem('allowed').then(response => {
+            if (response == null || response == true) {
+                e.preventDefault();
+            } else {
+                StackNavigator.dispatch(e.data.action)
+            }
+        });
+    },[StackNavigator]);
 
     return(
         <Layout style={styles.container} level='1'>

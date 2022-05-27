@@ -40,6 +40,11 @@ const ImageStyle = StyleSheet.create({
    },
    background: {
     flex: 1,
+   },
+   splashscreen: {
+      height: height * 0.3,
+      width: width * 0.55,
+      margin: 5
    }
 })
 
