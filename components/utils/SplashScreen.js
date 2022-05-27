@@ -11,10 +11,10 @@ const SplashScreen = (props) => {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.CAMERA,
             {
-              title: "Cool Photo App Camera Permission",
+              title: "Camera Permission",
               message:
-                "Cool Photo App needs access to your camera " +
-                "so you can take awesome pictures.",
+                "App needs access to your camera " +
+                "so you can take MoMs and Surficial Data.",
               buttonNeutral: "Ask Me Later",
               buttonNegative: "Cancel",
               buttonPositive: "OK"
@@ -35,10 +35,10 @@ const SplashScreen = (props) => {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
             {
-              title: "Cool Photo App READ_EXTERNAL_STORAGE Permission",
+              title: "Read Storage Permission",
               message:
-                "Cool Photo App needs access to your READ_EXTERNAL_STORAGE " +
-                "so you can take awesome pictures.",
+                "App needs access to your Read Storage " +
+                "so you can store Images, Maps and Graphs.",
               buttonNeutral: "Ask Me Later",
               buttonNegative: "Cancel",
               buttonPositive: "OK"
@@ -97,7 +97,6 @@ const SplashScreen = (props) => {
     }
 
     useEffect(()=> {
-      console.log("HIT ME");
       if (CheckPermission()) {
           props.navigation.navigate('Signin');
       }

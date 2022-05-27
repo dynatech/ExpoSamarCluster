@@ -1,10 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, TouchableHighlight} from 'react-native';
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
+import SurficialGraph from '../../graphs/SurficialGraph';
 
 const SurficialData = () => {
+    const [surficialData, setSurficialData] = useState(require('../../graphs/dummy/SurficialPlotData.json'));
+    
     return(
         <Fragment>
             <ScreenHeader title="Surficial Data"/>
@@ -13,6 +16,7 @@ const SurficialData = () => {
                     <Text category="p1" style={{textAlign: 'center'}}>Latest Surficial Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
                 </Layout>
                 <Layout style={styles.image_container}>
+                    <SurficialGraph data={surficialData}/>
                     {/* <TouchableHighlight onPress={()=> setMapView(true)}>
                        <CustomProgressiveImage 
                             source={require('../../../hazard_maps/LPA_DSL_Hazard_Map.jpg')}

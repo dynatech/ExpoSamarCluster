@@ -62,8 +62,9 @@ const SurficialMarker = () => {
                         </View>
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                             {
-                                marker_names.map((row)=>(
+                                marker_names.map((row, index)=>(
                                     <Input
+                                        key={index}
                                         style={styles.input_group}
                                         placeholder='E.g. XXXYYYZZZ'
                                         // value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
@@ -89,8 +90,8 @@ const SurficialMarker = () => {
                                 selectedIndex={selectedPanahonIndex}
                                 onSelect={index => setSelectedPanahonIndex(index)}>
                                     {
-                                        panahon_list.map((row)=> (
-                                            <SelectItem title={row.panahon} value={row.panahon}/>
+                                        panahon_list.map((row, index)=> (
+                                            <SelectItem key={index} title={row.panahon} value={row.panahon}/>
                                         ))
                                     }
                             </Select>
