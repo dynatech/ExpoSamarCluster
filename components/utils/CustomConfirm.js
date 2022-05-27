@@ -15,9 +15,9 @@ const CustomConfirm = (props) => {
             }}
         >
             <View style={{flex: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{width: 250, height: 250, backgroundColor: '#16526D', borderRadius: 15, justifyContent: 'center', borderColor: 'white', borderWidth: 5}}>
-                    <View>
-                        <Text style={{textAlign: 'center', fontSize: 30}} category='h1'>{title}</Text>
+                <View style={{width: 300, height: 300, backgroundColor: '#16526D', borderRadius: 15, justifyContent: 'center', borderColor: 'white', borderWidth: 5}}>
+                    <View style={{padding: 5}}>
+                        <Text style={{textAlign: 'center', fontSize: 30, flexWrap: 'wrap'}} category='h1'>{title}</Text>
                         <Text style={{textAlign: 'center', fontSize: 75}} category='h1'>
                             {
                                 confirmStatus == "success" &&
