@@ -28,6 +28,12 @@ const SurficialGraph = (props) => {
     }, [])
 
     const configuration = {
+        title: {
+            text: `<b>Surficial Data History Chart</b><br/>As of: <b>${moment().format("D MMM YYYY, HH:mm")}</b>`,
+            style: { fontSize: "0.85rem" },
+            margin: 26,
+            y: 20
+        },
         xAxis: {
             type: "datetime",
             dateTimeLabelFormats: {

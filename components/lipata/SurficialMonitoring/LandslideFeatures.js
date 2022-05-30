@@ -5,6 +5,7 @@ import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Modal from "react-native-modal";
+import CustomConfirm from '../../utils/CustomConfirm';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -28,6 +29,10 @@ const LandslideFeatures = () => {
     const [imageFiles, setImageFiles] = useState([]);
     const [viewImage, setViewImage] = useState(null);
     const [openImageViewer, setOpenImageViewer] = useState(false);
+
+    const [displayConfirm, setDisplayConfirm] = useState(false);
+    const [confirmStatus, setConfirmStatus] = useState("success");
+    const [confirmDescription, setConfirmDescription] = useState({});
 
     const initializeCamera = async () => {
         let options = {
@@ -243,7 +248,14 @@ const LandslideFeatures = () => {
                             </ScrollView>
                         </View>
                         <View >
-                            <Button status="info" onPress={()=> {}}>Submit</Button>
+                            <Button status="info" onPress={()=> {
+                                setConfirmStatus("success");
+                                setConfirmDescription({
+                                    title: 'Success!',
+                                    caption: 'Manifestation of movements submitted!'
+                                })
+                                setDisplayConfirm(true);
+                            }}>Submit</Button>
                         </View>
                     </Layout>
                 </ScrollView>
@@ -261,6 +273,16 @@ const LandslideFeatures = () => {
                         <ImageBackground source={{uri: viewImage.uri}} resizeMode='cover' style={{flex: 1}} />
                 }
             </Modal>
+            <CustomConfirm 
+                title={confirmDescription.title}
+                caption={confirmDescription.caption}
+                displayConfirm={displayConfirm}
+                confirmStatus={confirmStatus}
+                setDisplayConfirm={setDisplayConfirm}
+                callback={(stat)=> {
+                    setDisplayConfirm(false);
+                }}
+            />
         </Fragment>
     )
 }
