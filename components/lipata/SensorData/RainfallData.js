@@ -1,44 +1,69 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { StyleSheet, Modal, TouchableHighlight} from 'react-native';
 import CustomProgressiveImage from '../../utils/CustomProgressiveImage';
-import { Layout, Text, Input, Button } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { ImageStyle } from '../../../styles/image_style';
+import RainfallGraph from '../../graphs/RainfallGraph';
 
 import moment from 'moment';
-
+import { ScrollView } from 'react-native-gesture-handler';
 
 const RainfallData = () => {
     const [mapView, setMapView] = useState(false);
+    const [selectedViewIndex, setSelectedViewIndex] = useState(new IndexPath(0));
+    const [rainfallData, setRainfallData] = useState(require('../../graphs/dummy/RainfallPlotData.json'));
+
+    const VIEW_LIST = [
+        {
+            view: 'insta',
+            title: 'Instantaneous Rainfall Data'
+        },
+        {
+            view: 'cumulative',
+            title: 'Cumulative Rainfall Data'
+        },
+    ]
 
     return(
         <Fragment>
             <ScreenHeader title="Rainfall Data"/>
             <Layout style={styles.container} level='1'>
-                <Layout style={styles.layout}>
-                    <Text category="p1" style={{textAlign: 'center'}}>Latest Rainfall Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
-                </Layout>
-                <Layout style={styles.image_container}>
-                    <TouchableHighlight onPress={()=> setMapView(true)}>
-                       <CustomProgressiveImage 
-                            source={require('../../../hazard_maps/LPA_DSL_Hazard_Map.jpg')}
-                            style={ImageStyle.graphs}
-                            resizeMode="cover"
-                       />
-                    </TouchableHighlight>
-                </Layout>
-                <Layout style={{padding: 10}}>
-                    <Button style={styles.buttonGroup} status="info" onPress={()=> {
-                        console.log("DOWNLOAD")
-                    }}>Download</Button>
-                </Layout>
-                <Layout style={{padding: 10}}>
-                    <Button style={styles.buttonGroup} status="primary" onPress={()=> {
-                        console.log("SHARE")
-                    }}>Share</Button>
-                </Layout>
-                
+                <ScrollView>
+                    <Layout style={styles.layout}>
+                        <Text category="p1" style={{textAlign: 'center'}}>Latest Rainfall Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
+                    </Layout>
+                    <Layout style={[styles.layout, {paddingBottom: 10}]}>
+                        <Select
+                            style={{width: '100%'}}
+                            placeholder="             "
+                            label={evaProps => <Text {...evaProps}>Rainfall Graph:</Text>}
+                            caption={evaProps => <Text {...evaProps}>Required</Text>}
+                            value={selectedViewIndex && VIEW_LIST[selectedViewIndex.row].title}
+                            selectedIndex={selectedViewIndex}
+                            onSelect={index => setSelectedViewIndex(index)}>
+                                {
+                                    VIEW_LIST.map((row, index)=> (
+                                        <SelectItem key={index} title={row.title} value={row.view}/>
+                                    ))
+                                }
+                        </Select>
+                    </Layout>
+                    <Layout style={styles.graph_container}>
+                        <RainfallGraph data={rainfallData} view={VIEW_LIST[selectedViewIndex.row].view}/>
+                    </Layout>
+                    <Layout style={{padding: 10}}>
+                        <Button style={styles.buttonGroup} status="info" onPress={()=> {
+                            console.log("DOWNLOAD")
+                        }}>Download</Button>
+                    </Layout>
+                    <Layout style={{padding: 10}}>
+                        <Button style={styles.buttonGroup} status="primary" onPress={()=> {
+                            console.log("SHARE")
+                        }}>Share</Button>
+                    </Layout>
+                </ScrollView>
             </Layout>
             <Modal visible={mapView}
                 transparent={true}>
@@ -82,5 +107,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    graph_container: {
+        height: 800,
+        width: '100%'
     }
 });

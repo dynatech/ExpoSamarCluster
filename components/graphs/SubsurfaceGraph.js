@@ -61,7 +61,7 @@ const SubsurfaceGraph = (props) => {
         };
     }
 
-    function prepareDisplacementChartOption (set_data) {
+    const prepareDisplacementChartOption = (set_data) => {
         const { orientation, data, annotations } = set_data;
         const xAxisTitle = orientation === "across_slope" ? "Across Slope" : "Downslope";
         return {
@@ -118,7 +118,7 @@ const SubsurfaceGraph = (props) => {
         };
     }
 
-    function prepareVelocityAlertsOption (set_data) {
+    const prepareVelocityAlertsOption = (set_data) => {
         const { data, orientation } = set_data;
         const xAxisTitle = orientation === "across_slope" ? "Across Slope" : "Downslope";
         const categories = data.map(x => x.name).filter(x => typeof x === "number");
