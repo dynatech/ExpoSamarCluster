@@ -50,7 +50,7 @@ const ScreenHeader = (props) => {
             {
                 headerIcon ? 
                     <Fragment>
-                        <View style={{flex: 0.3, paddingLeft: 20}}>
+                        <View style={{flex: 0.3, paddingLeft: 20, justifyContent: 'center', alignItems: 'center'}}>
                             <Image style={ImageStyle.header_icon} source={headerIcon}></Image>
                             <Text style={styles.iconLabel} category='c1'>{iconLabel}</Text>
                         </View>

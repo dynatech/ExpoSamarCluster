@@ -22,6 +22,7 @@
     "@ui-kitten/components": "^5.1.2",
     "@ui-kitten/eva-icons": "^5.1.2",
     "axios": "^0.27.2",
+    "chroma-js": "^2.4.2",
     "expo": "~45.0.0",
     "expo-dev-client": "~0.9.5",
     "expo-device": "~4.2.0",

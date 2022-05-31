@@ -28,7 +28,7 @@ const ImageStyle = StyleSheet.create({
    header_icon: {
       height: 100,
       width: 100,
-      marginTop: 15
+      marginTop: 15,
    },
    hazard_maps: {
       height: height * .5,
