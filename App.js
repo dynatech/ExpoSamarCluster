@@ -6,11 +6,23 @@ import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { default as theme } from './assets/branding.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import 'react-native-reanimated'
+import Config from 'react-native-config';
+import axios from 'axios';
+import MobileCaching  from './components/utils/MobileCaching';
 // import * as Device from 'expo-device';
 // import * as Notifications from 'expo-notifications';
 
 const App = () => {
   LogBox.ignoreAllLogs()
+    useEffect(() => {
+      axios.get(`${Config.API_URL}/api/utils/designations`)
+      .then(function (response) {
+        MobileCaching.setItem('DESIGNATIONS', response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+    }, []);
   
 
   const [expoPushToken, setExpoPushToken] = useState('');

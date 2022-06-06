@@ -18,14 +18,7 @@ const ProfileSettings = (props) => {
         {gender: '/'}
     ]
 
-    const DESIGNATION_LIST = [
-        {designation: "LEWC"},
-        {designation: "BLGU"},
-        {designation: "MLGU"},
-        {designation: "PLGU"},
-        {designation: "Community"}
-    ]
-
+    const [DESIGNATION_LIST, setDESIGNATION_LIST] = useState([]);
     const [openCalendar, setOpenCalendar] = useState(false);
     const [datetimestamp, setDateTimestamp] = useState(new Date())
     const [selectedGender, setSelectedGender] = useState(new IndexPath(0));
@@ -36,16 +29,19 @@ const ProfileSettings = (props) => {
         middlename: "",
         gender: GENDER_LIST[selectedGender.row].gender,
         kaarawan: new Date(),
-        designation: DESIGNATION_LIST[selectedDesignation.row].designation,
-        address: ""
+        designation: null,
+        address: "",
+        new_designation: ""
     });
 
     const [isLoading, setLoading] = useState(false);
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
+    const [showOtherField, setShowOtherField] = useState(false);
 
     const [isSignup, setIsSignup] = useState(false);
+    
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
@@ -56,29 +52,58 @@ const ProfileSettings = (props) => {
     }
 
     useEffect(()=> {
-        if (props.route.params) {
-            if (props.route.params.isSignup) {
-                setIsSignup(true);
-                setProfileSetting({...profileSetting, ...props.route.params});
-            }
-        } else {
-            MobileCaching.getItem('credentials').then(response => {
-                if (response) {
-                    setProfileSetting({
-                        id: response.data.user.user_id,
-                        firstname: response.data.user.first_name,
-                        lastname: response.data.user.last_name,
-                        middlename: response.data.user.middle_name,
-                        gender: response.data.user.sex,
-                        designation: '',
-                        kaarawan: new Date(response.data.user.birthday),
-                        address: response.data.profile.address
-                    });
-                    setSelectedGender(new IndexPath(GENDER_LIST.findIndex(o => o.gender == response.data.user.sex)));
+        MobileCaching.getItem('DESIGNATIONS').then(response=> {
+            setDESIGNATION_LIST([
+                ...response.data,
+                {designation: 'OTHERS'}
+            ]);
+            setProfileSetting({
+                ...profileSetting,
+                
+            })
+
+            if (props.route.params) {
+                if (props.route.params.isSignup) {
+                    setIsSignup(true);
+                    setProfileSetting({...profileSetting, ...props.route.params, designation: response.data[selectedDesignation].designation});
                 }
-            });
+            } else {
+                MobileCaching.getItem('credentials').then(response => {
+                    if (response) {
+                        setProfileSetting({
+                            id: response.data.user.user_id,
+                            firstname: response.data.user.first_name,
+                            lastname: response.data.user.last_name,
+                            middlename: response.data.user.middle_name,
+                            gender: response.data.user.sex,
+                            designation: response.data[selectedDesignation].designation,
+                            kaarawan: new Date(response.data.user.birthday),
+                            address: response.data.profile.address
+                        });
+                        setSelectedGender(new IndexPath(GENDER_LIST.findIndex(o => o.gender == response.data.user.sex)));
+                    }
+                });
+            }
+        })
+    }, [props]);
+
+    useEffect(()=> {
+        if (DESIGNATION_LIST.length != 0 ) {
+            if (DESIGNATION_LIST[selectedDesignation-1].designation == "OTHERS") {
+                setShowOtherField(true);
+                setProfileSetting({
+                    ...profileSetting,
+                    new_designation: ""
+                })
+            } else {
+                setShowOtherField(false);
+                setProfileSetting({
+                    ...profileSetting,
+                    new_designation: ""
+                })
+            }
         }
-    }, []);
+    }, [selectedDesignation]);
 
     return(
         <Fragment>
@@ -140,7 +165,7 @@ const ProfileSettings = (props) => {
                                     placeholder="             "
                                     label={evaProps => <Text {...evaProps}>Designation:</Text>}
                                     caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                    value={selectedDesignation && DESIGNATION_LIST[selectedDesignation-1].designation}
+                                    value={selectedDesignation && DESIGNATION_LIST.length != 0 && DESIGNATION_LIST[selectedDesignation-1].designation}
                                     selectedIndex={selectedDesignation}
                                     onSelect={index => {
                                         setSelectedDesignation(index)
@@ -154,6 +179,18 @@ const ProfileSettings = (props) => {
                             </Select>
                         </Layout>
                     </Layout>
+                    {
+                        showOtherField && 
+                        <Layout>
+                            <Input
+                                style={styles.input}
+                                placeholder='E.g. PHIVOLCS'
+                                value={profileSetting.new_designation}
+                                label={evaProps => <Text {...evaProps}>New Designation</Text>}
+                                onChangeText={(e)=> setProfileSetting({...profileSetting, new_designation: e})}
+                            />
+                        </Layout>
+                    }
                     <Layout>
                         <Input
                                 style={styles.input}
@@ -176,6 +213,13 @@ const ProfileSettings = (props) => {
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, address: e})}
                         />
+
+                        {
+                            isSignup && isSignup === false && 
+                                <Text style={[styles.input, styles.link]} onPress={() => {
+                                
+                                }}>Click here to request for mobile number update.</Text>
+                        }
                     </Layout>
                     <Layout style={{padding: 20}}>
                         <Button status="info" style={{width: '100%'}} onPress={()=> {
@@ -186,8 +230,10 @@ const ProfileSettings = (props) => {
                                     let data = {
                                         ...profileSetting,
                                         kaarawan: moment(profileSetting.kaarawan).format("YYYY-MM-DD"),
-                                        site_id: 24
+                                        site_id: 24,
+                                        designation_id: DESIGNATION_LIST.find(o => o.designation == profileSetting.designation).id
                                     }
+
                                     axios.post(`${Config.API_URL}/api/signup`, data).then((response) => {
                                         axios.post(`${Config.API_URL}/api/login`, response.data).then((response) => {
                                             if (response.data.ok == true) {
@@ -282,5 +328,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    link: {
+        fontStyle: 'italic',
+        textDecorationLine: 'underline',
+        color: '#F8991D'
+    },
 });

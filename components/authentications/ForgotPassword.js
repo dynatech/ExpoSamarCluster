@@ -29,7 +29,7 @@ const ForgotPassword = (props) => {
                                 setConfirmStatus("success");
                                 setConfirmDescription({
                                     title: 'Code Sent!',
-                                    caption: 'Check your email or phone for the code'
+                                    caption: 'We sent an OTP on your registered mobile number'
                                 })
                             }  else {
                                 setConfirmStatus("fail");

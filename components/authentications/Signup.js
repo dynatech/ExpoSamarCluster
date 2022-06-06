@@ -16,6 +16,26 @@ const Signup = (props) => {
     const [confirmDescription, setConfirmDescription] = useState({});
     const [signupData, setSignupData] = useState(null);
 
+    const isNumber = (char) => {
+        if (typeof char !== 'string') {
+          return false;
+        }
+      
+        if (char.trim() === '') {
+          return false;
+        }
+      
+        return !isNaN(char);
+    }
+
+    const isValidMobile = (mobile_no) => {
+        if (mobile_no.substring(0, 2) == "09" && mobile_no.length == 11) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return(
         <Layout style={styles.container} level='1' >
             <KeyboardAvoidingView style={{height: '100%'}}>
@@ -24,11 +44,10 @@ const Signup = (props) => {
                     <ScreenHeader title="Sign up" />
                     <Layout>
                     <Formik
-                        initialValues={{username: '', email: '', password: '', confirmPassword: ''}}
+                        initialValues={{username: '', mobile_no: '', password: '', confirmPassword: ''}}
                         onSubmit={values => {
-                            const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-                            if (re.test(values.email)) {
-                                if (/\s/.test(values.username.trim()) != true) {
+                            if (/\s/.test(values.username.trim()) != true && values.username != "") {
+                                if (isValidMobile(values.mobile_no)) {
                                     if (values.password === values.confirmPassword) {
                                         setIsLoading(true);
                                         setTimeout(()=> {
@@ -44,8 +63,8 @@ const Signup = (props) => {
                                                         caption: response.data.message
                                                     })
                                                     setDisplayConfirm(true);
-                                               }
-                                               setIsLoading(false);
+                                                }
+                                                setIsLoading(false);
                                             }).catch((error) => {
                                                 setIsLoading(false);
                                                 setConfirmStatus("fail");
@@ -69,15 +88,15 @@ const Signup = (props) => {
                                     setConfirmStatus("fail");
                                     setConfirmDescription({
                                         title: 'Sign up failed',
-                                        caption: 'Invalid Username'
+                                        caption: 'Invalid Mobile Number'
                                     })
-                                    setDisplayConfirm(true);
+                                    setDisplayConfirm(true); 
                                 }
                             } else {
                                 setConfirmStatus("fail");
                                 setConfirmDescription({
                                     title: 'Sign up failed',
-                                    caption: 'Invalid Email Address'
+                                    caption: 'Invalid Username'
                                 })
                                 setDisplayConfirm(true);
                             }
@@ -97,10 +116,12 @@ const Signup = (props) => {
                                         />
                                         <Input
                                             style={styles.input}
-                                            placeholder='Email'
-                                            values={values.email}
-                                            label={evaProps => <Text {...evaProps}>Email</Text>}
-                                            onChangeText={handleChange('email')}
+                                            placeholder='09xxxxxxxxx'
+                                            maxLength={11}
+                                            values={values.mobile_no}
+                                            keyboardType={'number-pad'}
+                                            label={evaProps => <Text {...evaProps}>Mobile Number</Text>}
+                                            onChangeText={handleChange('mobile_no')}
                                         />
                                         <Input
                                             style={styles.input}
