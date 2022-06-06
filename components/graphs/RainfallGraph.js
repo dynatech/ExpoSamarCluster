@@ -38,7 +38,13 @@ const RainfallGraph = (props) => {
         rain: "rgba(0, 0, 0, 0.9)"
     };
 
-    function prepareRainfallData (set) {
+    const createRainPlotSubtitle = (distance, gauge_name) => {
+        const source = gauge_name.toUpperCase().replace("RAIN_", "");
+        const subtitle = distance === null ? source : `${source} (${distance} km away)`;
+        return subtitle;
+    }
+
+    const prepareRainfallData = (set) => {
         const { null_ranges, invalid_data } = set;
         const series_data = [];
         const max_rval_data = [];
@@ -69,6 +75,87 @@ const RainfallGraph = (props) => {
         const null_processed = null_ranges.map(({ from, to }) => ({ from, to, color: "rgba(68, 170, 213, 0.3)" }));
     
         return { set, series_data, max_rval_data, null_processed };
+    }
+
+    const prepareCumulativeRainfallChartOption = (row) => {
+        const { set, series_data } = row;
+        const {
+            distance, max_72h, 
+            threshold_value: max_rain_2year, gauge_name
+        } = set;
+        
+        return {
+            series: series_data,
+            chart: {
+                type: "line",
+                zoomType: "x",
+                panning: true,
+                panKey: "shift",
+                height: 600,
+                resetZoomButton: {
+                    position: {
+                        x: 0,
+                        y: -30
+                    }
+                },
+                spacingTop: 16,
+                spacingRight: 24
+            },
+            title: {
+                text: `<b>Cumulative Rainfall Chart of ${createRainPlotSubtitle(distance, gauge_name)}</b><br/>As of: <b>${moment().format("D MMM YYYY, HH:mm")}</b>`,
+                style: { fontSize: "0.85rem" },
+                margin: 26,
+                y: 20
+            },
+            xAxis: {
+                type: "datetime",
+                dateTimeLabelFormats: {
+                    month: "%e %b %Y",
+                    year: "%Y"
+                },
+                title: {
+                    text: "<b>Date</b>"
+                },
+                events: {
+                    setExtremes: syncExtremes
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "<b>Value (mm)</b>"
+                },
+                max: Math.max(0, (max_72h - parseFloat(max_rain_2year))) + parseFloat(max_rain_2year),
+                min: 0,
+                plotBands: [{
+                    value: Math.round(parseFloat(max_rain_2year / 2) * 10) / 10,
+                    color: rainfall_colors["24h"],
+                    dashStyle: "shortdash",
+                    width: 2,
+                    zIndex: 0,
+                    label: {
+                        text: `24-hr threshold (${max_rain_2year / 2})`
+        
+                    }
+                }, {
+                    value: max_rain_2year,
+                    color: rainfall_colors["72h"],
+                    dashStyle: "shortdash",
+                    width: 2,
+                    zIndex: 0,
+                    label: {
+                        text: `72-hr threshold (${max_rain_2year})`
+                    }
+                }]
+            },
+            plotOptions: {
+                series: {
+                    marker: {
+                        radius: 3
+                    },
+                    cursor: "pointer"
+                }
+            }
+        };
     }
 
     useEffect(() => {

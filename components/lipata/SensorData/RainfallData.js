@@ -51,7 +51,7 @@ const RainfallData = () => {
                         </Select>
                     </Layout>
                     <Layout style={styles.graph_container}>
-                        <RainfallGraph data={rainfallData} view={VIEW_LIST[selectedViewIndex.row].view}/>
+                        {/* <RainfallGraph data={rainfallData} view={VIEW_LIST[selectedViewIndex.row].view}/> */}
                     </Layout>
                     <Layout style={{padding: 10}}>
                         <Button style={styles.buttonGroup} status="info" onPress={()=> {
