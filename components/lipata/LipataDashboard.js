@@ -18,7 +18,6 @@ const LipataDashboard = (props) => {
         });
     }, [props]);
 
-
     useEffect(() =>
     {
         StackNavigator.addListener('beforeRemove', (e) => {

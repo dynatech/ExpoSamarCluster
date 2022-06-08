@@ -3,18 +3,30 @@ import { StyleSheet, TouchableOpacity} from 'react-native';
 import { Layout, Text} from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
 import moment from 'moment';
-
+import axios from 'axios';
+import Config from 'react-native-config';
 
 const SiteSummary = (props) => {
     
     const [tempDate, setTempDate] = useState("");
-    const mountedRef = useRef(true)
+    const mountedRef = useRef(true);
+    const dateRef = useRef(new Date())
+
+    useEffect(()=> {
+        axios.get(`${Config.API_URL}/api/utils/server_time_api`)
+        .then(function (response) {
+            dateRef.current = response.data.time;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }, []);
 
     useEffect(() => {
         setInterval(() => {
             if (!mountedRef.current) return null
-            const currentDate = new Date()
-            setTempDate(moment(currentDate).format("LL hh:mm:ss A"))
+            dateRef.current = moment(dateRef.current).add(1, 'seconds').format("LL hh:mm:ss A")
+            setTempDate(dateRef.current)
         }, 1000)
     },[])
 
