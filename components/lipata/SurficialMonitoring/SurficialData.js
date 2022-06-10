@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, TouchableHighlight} from 'react-native';
-import { Layout, Text, Input, Button } from '@ui-kitten/components';
+import { StyleSheet, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Layout, Text, Icon, Button } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
 import SurficialGraph from '../../graphs/SurficialGraph';
+import { DataTable } from 'react-native-paper';
 
 const SurficialData = () => {
     const [surficialData, setSurficialData] = useState(require('../../graphs/dummy/SurficialPlotData.json'));
@@ -11,36 +12,179 @@ const SurficialData = () => {
     return(
         <Fragment>
             <ScreenHeader title="Surficial Data"/>
-            <Layout style={styles.container} level='1'>
-                <Layout style={styles.layout}>
-                    <Text category="p1" style={{textAlign: 'center'}}>Latest Surficial Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
+            <ScrollView>
+                <Layout style={styles.container} level='1'>
+                    <Layout style={styles.layout}>
+                        <Text category="p1" style={{textAlign: 'center'}}>Latest Surficial Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
+                    </Layout>
+                    <Layout style={styles.graph_container}>
+                        <SurficialGraph data={surficialData}/>
+                    </Layout>
+                    <Layout style={{padding: 10}}>
+                        <Button style={styles.buttonGroup} status="info" onPress={()=> {
+                            console.log("DOWNLOAD")
+                        }}>Download</Button>
+                    </Layout>
+                    <Layout style={{padding: 10}}>
+                        <Button style={styles.buttonGroup} status="primary" onPress={()=> {
+                            console.log("SHARE")
+                        }}>Share</Button>
+                    </Layout>
                 </Layout>
-                <Layout style={styles.graph_container}>
-                    <SurficialGraph data={surficialData}/>
-                    {/* <TouchableHighlight onPress={()=> setMapView(true)}>
-                       <CustomProgressiveImage 
-                            source={require('../../../hazard_maps/LPA_DSL_Hazard_Map.jpg')}
-                            style={ImageStyle.hazard_maps}
-                            resizeMode="cover"
-                       />
-                    </TouchableHighlight> */}
+                <Layout style={[styles.container, {paddingBottom: 50}]} level='1'>
+                    <Layout style={styles.layout}>
+                        <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Manifestation of Movements as of {moment().format("MMMM D, YYYY")}</Text>
+                    </Layout>
+                    <KeyboardAvoidingView
+                        style={{height: '100%'}}
+                    >   
+                        <View>
+                            <ScrollView horizontal={true}>
+                                <View style={{width: 600, backgroundColor: '#ffffff20'}}>
+                                    <DataTable>
+                                        <DataTable.Header>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Petsa</Text></DataTable.Title>
+                                            <DataTable.Title ><Text style={{color: 'white'}}>Feature</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Feature Name</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Reporter</Text></DataTable.Title>
+                                            <DataTable.Title numeric><Text style={{color: 'white'}}>Action</Text></DataTable.Title>
+                                        </DataTable.Header>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                    </DataTable>
+                                </View>
+                            </ScrollView>
+                            <Layout level="1" style={{flexDirection: 'row-reverse', marginTop: 10, marginBottom: 10}}>
+                                <Layout style={{flexDirection: 'row'}}>
+                                    <Icon name="arrow-left-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("LEFT")}}/>
+                                    <Icon name="arrow-right-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("RIGHT")}}/>
+                                </Layout>
+                                <Layout style={{marginRight: 10}}>
+                                    <Text>Page 1 of 4</Text>
+                                </Layout>
+                            </Layout>
+                            <Layout>
+                                <Button status="warning">Download</Button>
+                            </Layout>
+                        </View>
+                    </KeyboardAvoidingView>
                 </Layout>
-                <Layout style={{padding: 10}}>
-                    <Button style={styles.buttonGroup} status="info" onPress={()=> {
-                        console.log("DOWNLOAD")
-                    }}>Download</Button>
+                <Layout style={[styles.container, {paddingTop: 40, paddingBottom: 50}]} level='1'>
+                    <Layout style={styles.layout}>
+                        <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Surficial Marker Data as of {moment().format("MMMM D, YYYY")}</Text>
+                    </Layout>
+                    <KeyboardAvoidingView
+                        style={{height: '100%'}}
+                    >   
+                        <View>
+                            <ScrollView horizontal={true}>
+                                <View style={{width: 600, backgroundColor: '#ffffff20'}}>
+                                    <DataTable>
+                                        <DataTable.Header>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Petsa</Text></DataTable.Title>
+                                            <DataTable.Title ><Text style={{color: 'white'}}>Crack A</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Crack B</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Crack C</Text></DataTable.Title>
+                                            <DataTable.Title numeric><Text style={{color: 'white'}}>Action</Text></DataTable.Title>
+                                        </DataTable.Header>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2.3cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>4.2cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>29cm</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2.3cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>4.2cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>29cm</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2.3cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>4.2cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>29cm</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                    </DataTable>
+                                </View>
+                            </ScrollView>
+                            <Layout level="1" style={{flexDirection: 'row-reverse', marginTop: 10, marginBottom: 10}}>
+                                <Layout style={{flexDirection: 'row'}}>
+                                    <Icon name="arrow-left-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("LEFT")}}/>
+                                    <Icon name="arrow-right-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("RIGHT")}}/>
+                                </Layout>
+                                <Layout style={{marginRight: 10}}>
+                                    <Text>Page 1 of 4</Text>
+                                </Layout>
+                            </Layout>
+                            <Layout>
+                                <Button status="warning">Download</Button>
+                            </Layout>
+                        </View>
+                    </KeyboardAvoidingView>
                 </Layout>
-                <Layout style={{padding: 10}}>
-                    <Button style={styles.buttonGroup} status="primary" onPress={()=> {
-                        console.log("SHARE")
-                    }}>Share</Button>
-                </Layout>
-                
-            </Layout>
-            {/* <Modal visible={mapView}
-                transparent={true}>
-                <ImageViewer imageUrls={[{url:'', props: {source: require('../../../hazard_maps/LPA_DSL_Hazard_Map.jpg')}}]} enableSwipeDown={true} onSwipeDown={() => { setMapView(false) }} />
-            </Modal> */}
+            </ScrollView>
+
         </Fragment>
     )
 }

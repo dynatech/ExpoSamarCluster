@@ -150,7 +150,7 @@ const LandslideFeatures = () => {
                                 style={styles.input}
                                 placeholder='E.g. XXXYYYZZZ'
                                 value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
-                                label={evaProps => <Text {...evaProps}>Petsa at Oras</Text>}
+                                label={evaProps => <Text {...evaProps}>Petsa at Oras na nakita</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 accessoryRight={CalendarIcon}
                                 // onChangeText={handleChange('household_head')}

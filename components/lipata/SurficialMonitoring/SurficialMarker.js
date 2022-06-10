@@ -53,7 +53,11 @@ const SurficialMarker = () => {
                                 style={styles.input}
                                 placeholder='E.g. XXXYYYZZZ'
                                 value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
-                                label={evaProps => <Text {...evaProps}>Petsa at Oras</Text>}
+                                label={evaProps => 
+                                    <View style={{flexDirection: 'row'}}>
+                                        <Text {...evaProps}>Petsa at Oras ng pag sukat  </Text>
+                                        <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} />
+                                    </View>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 accessoryRight={CalendarIcon}
                                 // onChangeText={handleChange('household_head')}
@@ -68,7 +72,12 @@ const SurficialMarker = () => {
                                         style={styles.input_group}
                                         placeholder='E.g. XXXYYYZZZ'
                                         // value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
-                                        label={evaProps => <Text {...evaProps}>Sukat ni {row.name}</Text>}
+                                        label={evaProps => 
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text {...evaProps}>Sukat ni {row.name}  </Text>
+                                                <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} />
+                                            </View>
+                                        }
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
                                         onChangeText={(e)=> {
                                             let temp = {...markerMeasurement};
@@ -84,7 +93,8 @@ const SurficialMarker = () => {
                             <Select
                                 style={{padding: 20}}
                                 placeholder="             "
-                                label={evaProps => <Text {...evaProps}>Panahon:</Text>}
+                                label={evaProps => 
+                                <Text {...evaProps}>Panahon:</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 value={selectedPanahonIndex && panahon_list[selectedPanahonIndex.row].panahon}
                                 selectedIndex={selectedPanahonIndex}
