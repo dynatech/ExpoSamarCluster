@@ -1,9 +1,11 @@
 import React, { Fragment, useState, useRef } from 'react';
 import { StyleSheet, Dimensions, View, Keyboard, Linking } from 'react-native';
-import { Layout, Text, Input, Icon, List, ListItem } from '@ui-kitten/components';
+import { Layout, Text, Input, Icon, List, ListItem, Divider } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
+import { setIn } from 'formik';
 
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const data = [
     {
@@ -30,8 +32,16 @@ const ThreadHeaderIcons = (props) => {
 const Messenger = () => {
     const [conversation, setConversation] = useState(data);
     const [message, setMessage] = useState(null);
+    const [isInboxView, setInboxView] = useState(true);
 
     const ListRef = useRef();
+
+    const inboxData = new Array(14).fill({
+        name: 'Mang boy',
+        mobile_no: '+(63) 9123456789',
+        message: 'Kamusta po kayo jan?',
+        ts: moment().format("YYYY-MM-DD HH:mm:ss")
+    });
 
 
     const renderItem = ({item, index}) => {
@@ -67,6 +77,23 @@ const Messenger = () => {
         )
     }
 
+    const renderInbox = ({ item, index }) => (
+        <ListItem
+            key={index}
+            title={
+                <View style={{flexDirection: 'column'}}>
+                    <Text>{`${item.name} ${index + 1}`}</Text>
+                    <Text category="p2">{`${item.mobile_no}`}</Text>
+                    <Text category="p1">{`${item.message}`}</Text>
+                </View>
+            }
+            description={`${item.ts}`}
+            onPress={()=> {
+                setInboxView(false);    
+            }}
+        />
+    );
+
 
     const SendIcon = (message, setMessage, setConversation, conversation) => {
         let temp = [...conversation];
@@ -94,6 +121,19 @@ const Messenger = () => {
     return(
         <Fragment>
             <ScreenHeader title="Messenger"/>
+            {
+                isInboxView ? 
+                    <Layout style={styles.container} level='1'>
+                        <Layout style={styles.inbox_list_layout}>
+                            <List
+                                style={styles.inbox_list}
+                                data={inboxData}
+                                ItemSeparatorComponent={Divider}
+                                renderItem={renderInbox}
+                            />
+                        </Layout>
+                    </Layout>
+                :
                 <Layout style={styles.container} level='1'>
                     <Layout style={styles.recipient_section}>
                         <Input
@@ -129,7 +169,7 @@ const Messenger = () => {
                         />
                     </Layout>
                 </Layout>
-            
+            }
         </Fragment>
     )
 }
@@ -178,5 +218,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    inbox_list_layout: {
+        flex: 0.85,
+    },
+    inbox_list: {
+        width: SCREEN_WIDTH - 40,
+        maxHeight: SCREEN_HEIGHT - 20,
+    },
 });
