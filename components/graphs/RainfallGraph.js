@@ -7,6 +7,9 @@ import chroma from "chroma-js";
 const RainfallGraph = (props) => {
     const { data , view } = props;
     const [processedData, setProcessedData] = useState([]);
+    const [graphs, setGraphs] = useState([]);
+    const [dataGraph, setDataGraph] = useState(null);
+
 
     const default_data = {
         set: {
@@ -85,6 +88,8 @@ const RainfallGraph = (props) => {
         } = set;
         
         return {
+            graph_view: 'cumulative',
+            gauge_name: gauge_name.toUpperCase(),
             series: series_data,
             chart: {
                 type: "line",
@@ -116,9 +121,6 @@ const RainfallGraph = (props) => {
                 title: {
                     text: "<b>Date</b>"
                 },
-                events: {
-                    setExtremes: syncExtremes
-                }
             },
             yAxis: {
                 title: {
@@ -158,6 +160,68 @@ const RainfallGraph = (props) => {
         };
     }
 
+    const prepareInstantaneousRainfallChartOption = (row, input, is_tagging_data, setIsTaggingData, setTaggingData) => {
+        const { set, max_rval_data, null_processed } = row;
+        const {
+            distance, max_rval, gauge_name, rain_id
+        } = set;
+        // const { ts_start, ts_end, site_code } = input;
+    
+        return {
+            graph_view: 'instantaneous',
+            gauge_name: gauge_name.toUpperCase(),
+            series: max_rval_data,
+            chart: {
+                type: "column",
+                zoomType: "x",
+                panning: true,
+                height: 400,
+                resetZoomButton: {
+                    position: {
+                        x: 0,
+                        y: -30
+                    }
+                },
+                spacingTop: 16,
+                spacingRight: 24
+            },
+            title: {
+                text: `<b>Instantaneous Rainfall Chart of ${createRainPlotSubtitle(distance, gauge_name)}</b><br/>As of: <b></b>`,
+                style: { fontSize: "0.85rem" },
+                margin: 26,
+                y: 20
+            },
+            xAxis: {
+                // min: Date.parse(ts_start),
+                // max: Date.parse(ts_end),
+                plotBands: null_processed,
+                type: "datetime",
+                dateTimeLabelFormats: {
+                    month: "%e %b %Y",
+                    year: "%Y"
+                },
+                title: {
+                    text: "<b>Date</b>"
+                },
+            },
+            yAxis: {
+                max: max_rval,
+                min: 0,
+                title: {
+                    text: "<b>Value (mm)</b>"
+                }
+            },
+            plotOptions: {
+                series: {
+                    marker: {
+                        radius: 3
+                    },
+                    cursor: "pointer"
+                }
+            }
+        };
+    }
+
     useEffect(() => {
         const temp = [];
         data.forEach(set => {
@@ -171,17 +235,48 @@ const RainfallGraph = (props) => {
     useEffect(() => {
         const temp = [];
         processedData.forEach(data => {
-            // const instantaneous = prepareInstantaneousRainfallChartOption(data);
-            const cumulative = prepareCumulativeRainfallChartOption(data);
-            temp.push({ instantaneous, cumulative });
+            temp.push(prepareInstantaneousRainfallChartOption(data));
+            temp.push(prepareCumulativeRainfallChartOption(data))
         });
-        setOptions(temp);
-        if (temp.length > 0 && save_svg) setGetSVGNow(true);
+
+        if (temp.length != 0) {
+            setGraphs(temp);
+        }
     }, [processedData]);
 
+    useEffect(() => {
+       if (graphs.length != 0) {
+           let temp = [];
+            graphs.forEach(element => {
+                let exists = temp.find(o => o.value == element.gauge_name);
+                if (!exists) {
+                    temp.push({
+                        title: element.gauge_name.toUpperCase(),
+                        value: element.gauge_name
+                    });
+                }
+            });
+            props.setGaugeNames(temp);
+       }
+    }, [graphs]);
+
+    useEffect(()=> {
+        if (graphs.length != 0 && props.selectedGaugeName.length != 0) {
+            let graph = graphs.filter(o => o.gauge_name == props.selectedGaugeName);
+            let option = graph.find(o => o.graph_view == props.selectedViewIndex);
+            setDataGraph(option)
+        }
+    }, [props, graphs]);
 
     return(
-        <View></View>
+        <View>
+            {
+                dataGraph != null && 
+                <HighchartsWebView
+                    style={{ height: 400 }}
+                    config={dataGraph} />
+            }
+        </View>
     )
 }
 

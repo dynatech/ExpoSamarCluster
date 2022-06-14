@@ -13,11 +13,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 const RainfallData = () => {
     const [mapView, setMapView] = useState(false);
     const [selectedViewIndex, setSelectedViewIndex] = useState(new IndexPath(0));
+    const [selectedGaugeName, setSelectedGaugeName] = useState(new IndexPath(0));
     const [rainfallData, setRainfallData] = useState(require('../../graphs/dummy/RainfallPlotData.json'));
+    const [gaugeNames, setGaugeNames] = useState([]);
+    const [selectedGraphView, setSelectedGraphView] = useState([]);
 
     const VIEW_LIST = [
         {
-            view: 'insta',
+            view: 'instantaneous',
             title: 'Instantaneous Rainfall Data'
         },
         {
@@ -38,6 +41,22 @@ const RainfallData = () => {
                         <Select
                             style={{width: '100%'}}
                             placeholder="             "
+                            label={evaProps => <Text {...evaProps}>Gauge name:</Text>}
+                            caption={evaProps => <Text {...evaProps}>Required</Text>}
+                            value={selectedGaugeName && gaugeNames.length != 0 && gaugeNames[selectedGaugeName.row].title}
+                            selectedIndex={selectedGaugeName}
+                            onSelect={index => setSelectedGaugeName(index)}>
+                                {
+                                    gaugeNames.map((row, index)=> (
+                                        <SelectItem key={index} title={row.title} value={row.value}/>
+                                    ))
+                                }
+                        </Select>
+                    </Layout>
+                    <Layout style={[styles.layout, {paddingBottom: 10}]}>
+                        <Select
+                            style={{width: '100%'}}
+                            placeholder="             "
                             label={evaProps => <Text {...evaProps}>Rainfall Graph:</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             value={selectedViewIndex && VIEW_LIST[selectedViewIndex.row].title}
@@ -51,7 +70,7 @@ const RainfallData = () => {
                         </Select>
                     </Layout>
                     <Layout style={styles.graph_container}>
-                        {/* <RainfallGraph data={rainfallData} view={VIEW_LIST[selectedViewIndex.row].view}/> */}
+                        <RainfallGraph data={rainfallData} setGaugeNames={setGaugeNames} selectedViewIndex={VIEW_LIST[selectedViewIndex.row].view} selectedGaugeName={gaugeNames.length != 0 ? gaugeNames[selectedGaugeName.row].title : []}/>
                     </Layout>
                     <Layout style={{padding: 10}}>
                         <Button style={styles.buttonGroup} status="info" onPress={()=> {
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     graph_container: {
-        height: 800,
+        height: 400,
         width: '100%'
     }
 });
