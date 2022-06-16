@@ -53,11 +53,7 @@ const SurficialMarker = () => {
                                 style={styles.input}
                                 placeholder='E.g. XXXYYYZZZ'
                                 value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
-                                label={evaProps => 
-                                    <View style={{flexDirection: 'row'}}>
-                                        <Text {...evaProps}>Petsa at Oras ng pag sukat  </Text>
-                                        <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} />
-                                    </View>}
+                                label={evaProps => <Text {...evaProps}>Petsa at Oras ng pagsukat</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 accessoryRight={CalendarIcon}
                                 // onChangeText={handleChange('household_head')}
@@ -70,13 +66,10 @@ const SurficialMarker = () => {
                                     <Input
                                         key={index}
                                         style={styles.input_group}
-                                        placeholder='E.g. XXXYYYZZZ'
+                                        placeholder='Hal. 12cm'
                                         // value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
                                         label={evaProps => 
-                                            <View style={{flexDirection: 'row'}}>
-                                                <Text {...evaProps}>Sukat ni {row.name}  </Text>
-                                                <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} />
-                                            </View>
+                                            <Text {...evaProps}>Sukat ni {row.name}  </Text>
                                         }
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
                                         onChangeText={(e)=> {
@@ -91,10 +84,10 @@ const SurficialMarker = () => {
                         </View>
                         <View >
                             <Select
-                                style={{padding: 20}}
+                                style={{paddingLeft: 20, paddingRight: 20}}
                                 placeholder="             "
                                 label={evaProps => 
-                                <Text {...evaProps}>Panahon:</Text>}
+                                <Text {...evaProps}>Panahon</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 value={selectedPanahonIndex && panahon_list[selectedPanahonIndex.row].panahon}
                                 selectedIndex={selectedPanahonIndex}
@@ -109,9 +102,9 @@ const SurficialMarker = () => {
                         <View >
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder='E.g. Johann Sahagun'
                                 value={reporter}
-                                label={evaProps => <Text {...evaProps}>Pangalan ng nag sukat:</Text>}
+                                label={evaProps => <Text {...evaProps}>Pangalan ng nag sukat</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 onChangeText={e => setReporter(e)}
                                 // onBlur={handleBlur('household_head')}
@@ -139,8 +132,8 @@ const SurficialMarker = () => {
                 }}
             />
             <CustomConfirm 
-                title={"Are you sure?"}
-                caption={"Sigurado ka ba?"}
+                title={"Sigurado ka ba?"}
+                caption={`A: 23cm, B: 32cm, C: 11cm ${'\n'} Nagsukat: Johan Sahagun`} // template for submitting
                 displayConfirm={displayConfirm}
                 confirmStatus={"notify"}
                 setDisplayConfirm={setDisplayConfirm}
@@ -182,8 +175,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     input_group: {
-        width: (screenWidth / 3) * .85,
+        width: screenWidth * .85,
         paddingLeft: 20,
+        paddingBottom: 20,
         margin: 0,
         textAlign: 'center',
     },

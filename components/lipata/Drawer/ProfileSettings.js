@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { StyleSheet, BackHandler, View, ScrollView} from 'react-native';
+import { StyleSheet, BackHandler, View, ScrollView, Dimensions} from 'react-native';
 import { Layout, Text, Input, Button, Select, SelectItem, Icon, IndexPath } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import DatePicker from 'react-native-date-picker'
@@ -9,6 +9,8 @@ import CustomConfirm from '../../utils/CustomConfirm';
 import axios from 'axios';
 import Config from "react-native-config";
 import MobileCaching from '../../utils/MobileCaching';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const ProfileSettings = (props) => {
 
@@ -27,6 +29,7 @@ const ProfileSettings = (props) => {
         firstname: "",
         lastname: "",
         middlename: "",
+        suffix: "",
         gender: GENDER_LIST[selectedGender.row].gender,
         kaarawan: new Date(),
         designation: null,
@@ -75,6 +78,7 @@ const ProfileSettings = (props) => {
                             firstname: response.data.user.first_name,
                             lastname: response.data.user.last_name,
                             middlename: response.data.user.middle_name,
+                            suffix: response.data.user.suffix,
                             gender: response.data.user.sex,
                             designation: response.data[selectedDesignation].designation,
                             kaarawan: new Date(response.data.user.birthday),
@@ -115,7 +119,7 @@ const ProfileSettings = (props) => {
                             style={styles.input}
                             placeholder='E.g. Juan'
                             value={profileSetting.firstname}
-                            label={evaProps => <Text {...evaProps}>Firstname</Text>}
+                            label={evaProps => <Text {...evaProps}>First Name</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, firstname: e})}
                         />
@@ -125,12 +129,12 @@ const ProfileSettings = (props) => {
                             style={styles.input}
                             placeholder='E.g. Dela Cruz'
                             value={profileSetting.lastname}
-                            label={evaProps => <Text {...evaProps}>Lastname</Text>}
+                            label={evaProps => <Text {...evaProps}>Last Name</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, lastname: e})}
                         />
                     </Layout>
-                    <Layout>
+                    {/* <Layout>
                         <Input
                             style={styles.input}
                             placeholder='E.g. Tamayo'
@@ -138,13 +142,22 @@ const ProfileSettings = (props) => {
                             label={evaProps => <Text {...evaProps}>Middlename</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, middlename: e})}
                         />
+                    </Layout> */}
+                    <Layout>
+                        <Input
+                            style={styles.input}
+                            placeholder='E.g. Jr'
+                            value={profileSetting.suffix}
+                            label={evaProps => <Text {...evaProps}>Suffix</Text>}
+                            onChangeText={(e)=> setProfileSetting({...profileSetting, suffix: e})}
+                        />
                     </Layout>
                     <Layout style={{flexDirection: 'row'}}>
                         <Layout style={{flex: 0.5}}>
                             <Select
                                     style={{padding: 10}}
                                     placeholder="             "
-                                    label={evaProps => <Text {...evaProps}>Gender:</Text>}
+                                    label={evaProps => <Text {...evaProps}>Kasarian:</Text>}
                                     caption={evaProps => <Text {...evaProps}>Required</Text>}
                                     value={selectedGender && GENDER_LIST[selectedGender-1].gender}
                                     selectedIndex={selectedGender}
@@ -163,7 +176,7 @@ const ProfileSettings = (props) => {
                             <Select
                                     style={{padding: 10}}
                                     placeholder="             "
-                                    label={evaProps => <Text {...evaProps}>Designation:</Text>}
+                                    label={evaProps => <Text {...evaProps}>Stakeholder group:</Text>}
                                     caption={evaProps => <Text {...evaProps}>Required</Text>}
                                     value={selectedDesignation && DESIGNATION_LIST.length != 0 && DESIGNATION_LIST[selectedDesignation-1].designation}
                                     selectedIndex={selectedDesignation}
@@ -202,7 +215,7 @@ const ProfileSettings = (props) => {
                                 onChangeText={(e)=> setProfileSetting({...profileSetting, kaarawan: moment(e).format("YYYY-MM-DD")})}
                         />
                     </Layout>
-                    <Layout>
+                    {/* <Layout>
                         <Input
                             multiline
                             style={styles.input}
@@ -213,14 +226,18 @@ const ProfileSettings = (props) => {
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             onChangeText={(e)=> setProfileSetting({...profileSetting, address: e})}
                         />
+ 
+                    </Layout> */}
+                    {
 
-                        {
-                            isSignup && isSignup === false && 
-                                <Text style={[styles.input, styles.link]} onPress={() => {
+                        isSignup && isSignup === false && 
+                        <Layout>
+                            <Text style={[styles.input, styles.link]} onPress={() => {
                                 
-                                }}>Click here to request for mobile number update.</Text>
-                        }
-                    </Layout>
+                            }}>Click here to request for mobile number update.</Text>
+                        </Layout>
+
+                    }
                     <Layout style={{padding: 20}}>
                         <Button status="info" style={{width: '100%'}} onPress={()=> {
                             setLoading(true);
@@ -303,6 +320,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        minHeight: SCREEN_HEIGHT - 100
     },
     layout: {
       flex: 1,

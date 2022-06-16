@@ -122,7 +122,7 @@ const Signin = (props) => {
                             </Layout>
                             <Layout style={styles.buttonGroup}>
                                 <Button style={styles.button} status="info" onPress={handleSubmit}>Log In</Button>
-                                <Button style={styles.button} onPress={()=> {props.navigation.navigate('ForgotPassword');}}>Forgot Password?</Button>
+                                <Button style={styles.button} onPress={()=> {props.navigation.navigate('ForgotPassword');}}>Nakalimutan ang iyong password?</Button>
                                 <Button style={styles.button} onPress={()=> {props.navigation.navigate('Signup');}}>Waray pa account? Register didi!</Button>
                             </Layout>
                         </Fragment>

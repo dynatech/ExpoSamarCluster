@@ -9,6 +9,7 @@ import MobileCaching  from '../utils/MobileCaching';
 const LipataDashboard = (props) => {
     const StackNavigator = props.navigation;
     const [ userName, setUserName ] = useState("");
+    const [selectedDp, setSelectedDp] = useState(null);
 
     useEffect(() => {
         MobileCaching.getItem('credentials').then(response => {
@@ -47,13 +48,26 @@ const LipataDashboard = (props) => {
         })
     },[StackNavigator, props]);
 
+    // Avatar picker only
+    useEffect(()=> {
+        let dps = [
+            require('../../dp_dummy/yo.jpeg'),
+            require('../../dp_dummy/lorena.jpg'),
+            require('../../dp_dummy/eugene.jpg'),
+            require('../../dp_dummy/edch.jpg'),
+        ]
+        let index = Math.random() * (4 - 0) + 0;
+        setSelectedDp(dps[parseInt(index)]);
+        MobileCaching.setItem('selectedDp',dps[parseInt(index)]);
+    }, [props]);
+
     return(
         <Layout style={styles.container} level='1'>
             <KeyboardAvoidingView
                 style={{height: '100%'}}
             >
-                <NavHeader StackNavigator={StackNavigator} />
-                <SiteSummary userName={userName} />
+                <NavHeader StackNavigator={StackNavigator} dp={selectedDp}/>
+                <SiteSummary userName={userName}/>
                 <Layout style={styles.container} level='1'>
                     <Layout style={styles.layout} level='1'>
                         <Layout style={[styles.container, {paddingTop: 42}]} level='1'>

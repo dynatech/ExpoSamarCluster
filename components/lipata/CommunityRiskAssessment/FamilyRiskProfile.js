@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { StyleSheet, Dimensions, KeyboardAvoidingView, ScrollView, View} from 'react-native';
-import { Layout, Input, Text, Card, Button, Icon, Modal, CheckBox } from '@ui-kitten/components';
+import { Layout, Input, Text, Card, Button, Icon, Modal, CheckBox, } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import uuid from 'react-native-uuid';
 import ActionButton from 'react-native-action-button';
@@ -380,7 +380,10 @@ const FamilyRiskProfile = () => {
                     style={{height: '100%'}}
                 >   
                     <View>
-                    <Text style={{fontStyle: 'italic', textDecorationLine: 'underline'}} status="info" onPress={()=> setShowDataTable(true)}>Add a new Family profile here!</Text>
+                        <View style={{flexDirection: 'row', padding: 20}}>
+                            <Icon name='question-mark-circle-outline' fill='#8994ad' width={25} height={25} onPress={() => setVisible(true)}/>
+                            <Text style={{textAlign: 'center'}} category="h6" status="basic">Nakalista dito ang mga households na at-risk sa landslide</Text>
+                        </View>
                         <ScrollView horizontal={true}>
                             <View style={{width: 600, backgroundColor: '#ffffff20'}}>
                                 <DataTable>
@@ -445,6 +448,9 @@ const FamilyRiskProfile = () => {
                         </Layout>
                         <Layout>
                             <Button status="warning">Download</Button>
+                        </Layout>
+                        <Layout style={{padding: 10}}>
+                            <Text style={{fontStyle: 'italic', textDecorationLine: 'underline', textAlign: 'center'}} status="info" onPress={()=> setShowDataTable(true)}>Add a new Family profile here!</Text>
                         </Layout>
                     </View>
                 </KeyboardAvoidingView>

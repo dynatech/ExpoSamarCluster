@@ -1,6 +1,6 @@
 import React, {Fragment, useState} from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Layout, Text, Input, Button} from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Icon, Tooltip } from '@ui-kitten/components';
 import { Formik } from 'formik';
 import CustomConfirm from '../utils/CustomConfirm';
 import ScreenHeader from '../utils/ScreenHeader';
@@ -11,6 +11,7 @@ const ForgotPassword = (props) => {
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
+    const [visible, setVisible] = useState(false);
     
     const ResendCode = () => {
         return(
@@ -50,13 +51,13 @@ const ForgotPassword = (props) => {
                                             placeholder='Username or Mobile number'
                                             values={values.givenDetails}
                                             label={evaProps => <Text {...evaProps}>Input details</Text>}
-                                            caption={evaProps => <Text {...evaProps}>We will send you a verification code to set or reset your new password. Carrier rates may apply.</Text>}
+                                            caption={evaProps => <Text {...evaProps}>Magpapadala ng code sa iyong mobile number para maireset ang inyong password.</Text>}
                                             onChangeText={handleChange('givenDetails')}
                                         />
                                     </View>
                                 </Layout>
                                 <Layout style={styles.button}>
-                                    <Button status="info" onPress={handleSubmit}>Request OTP Code</Button>
+                                    <Button status="info" onPress={handleSubmit}>Manghingi ng code</Button>
                                 </Layout>
                             </Fragment>
                         )}
@@ -64,6 +65,14 @@ const ForgotPassword = (props) => {
             )
             }
     
+
+    const renderToggleButton = (evaProps) => (
+        <View style={{flexDirection: 'row'}}>
+            <Text {...evaProps}>OTP Code  </Text>
+            <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} onPress={() => setVisible(true)}/>
+        </View>
+
+    );
     const VerifyOtp = () => {
             return(
                 <Fragment>
@@ -72,7 +81,14 @@ const ForgotPassword = (props) => {
                             style={styles.input}
                             placeholder='XXXX'
                             // value={OtpCode}
-                            label={evaProps => <Text {...evaProps}>OTP Code</Text>}
+                            label={evaProps =>                                             
+                                <Tooltip
+                                    anchor={()=> renderToggleButton({...evaProps})}
+                                    visible={visible}
+                                    onBackdropPress={() => setVisible(false)}
+                                    placement={'top start'}>
+                                    Isulat ang code na natanggap sa iyong mobile number
+                                </Tooltip>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             // onChangeText={value => setOtpCode(value)}
                             />
@@ -80,19 +96,19 @@ const ForgotPassword = (props) => {
                             style={styles.input}
                             placeholder='******'
                             secureTextEntry={true}
-                            label={evaProps => <Text {...evaProps}>New Password</Text>}
+                            label={evaProps => <Text {...evaProps}>Bagong password</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             />
                         <Input
                             style={styles.input}
                             placeholder='******'
                             secureTextEntry={true}
-                            label={evaProps => <Text {...evaProps}>Confirm New Password</Text>}
+                            label={evaProps => <Text {...evaProps}>Ulitin ang bagong password</Text>}
                             caption={evaProps => <Text {...evaProps}>Required</Text>}
                             />
                         <Text style={[styles.input, styles.link]} onPress={() => {
                             
-                        }}>Did not receive OTP? Resend.</Text>
+                        }}>Di natanggap ang code? Magpadala ulit.</Text>
                         <Layout style={styles.button}>
                             <Button status="info" onPress={() => ("")}>Submit</Button>
                         </Layout> 
@@ -105,7 +121,7 @@ const ForgotPassword = (props) => {
             <Layout style={styles.container} level='1'>
             <KeyboardAvoidingView style={{height: '100%'}}>
             <ScrollView>
-                <ScreenHeader title="Forgot Password?"/>   
+                <ScreenHeader title="Nakalimutan ang iyong password?"/>   
                 {confirmDescription.title === 'Code Sent!' ?
                     <VerifyOtp />
                     :

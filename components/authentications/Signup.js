@@ -111,7 +111,7 @@ const Signup = (props) => {
                                             placeholder='Username'
                                             values={values.username}
                                             label={evaProps => <Text {...evaProps}>Username</Text>}
-                                            // caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                            caption={evaProps => <Text {...evaProps}>Ang password ay dapat buoin ng mga letra at numero na hindi bababa sa 8 titik at hindi lalampas sa 14</Text>}
                                             onChangeText={handleChange('username')}
                                         />
                                         <Input
@@ -136,13 +136,13 @@ const Signup = (props) => {
                                             placeholder='Confirm Password'
                                             secureTextEntry={true}
                                             values={values.confirmPassword}
-                                            label={evaProps => <Text {...evaProps}>Confirm Password</Text>}
+                                            label={evaProps => <Text {...evaProps}>Ulitin ang password </Text>}
                                             onChangeText={handleChange('confirmPassword')}
                                         />
                                     </View>
                                 </Layout>
                                 <Layout style={styles.button}>
-                                    <Button status="info" onPress={handleSubmit}>Sign Up</Button>
+                                    <Button status="info" onPress={handleSubmit}>Gumawa ng account</Button>
                                 </Layout>
                             </Fragment>
                         )}
