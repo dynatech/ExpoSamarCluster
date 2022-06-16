@@ -122,19 +122,19 @@ const NavHeader = (props) => {
               onBackdropPress={() => setOpenOverflowMenu(false)}>
               <MenuItem style={{backgroundColor: '#417bd9'}} title={evaProps => 
                 <View style={{width: '100%', paddingRight: 35}}>
-                  <Text {...evaProps}>New Message!</Text>
+                  <Text {...evaProps} style={{fontWeight: 'bold'}}>New Message!</Text>
                   <Text {...evaProps}>From: Mang boy (+63) 909-9090-90</Text>
                   <Text {...evaProps}>Kamusta po kayo?</Text>
               </View>} accessoryLeft={StarIcon}/>
               <MenuItem style={{backgroundColor: '#417bd9'}} title={evaProps => 
                   <View style={{width: '100%' , paddingRight: 35}}>
-                    <Text {...evaProps}>New Message!</Text>
+                    <Text {...evaProps} style={{fontWeight: 'bold'}}>New Message!</Text>
                     <Text {...evaProps}>From: Ma'am Susan (+63) 909-9090-91</Text>
                     <Text {...evaProps}>Good evening sir!</Text>
                   </View>} accessoryLeft={StarIcon}/>
                 <MenuItem style={{backgroundColor: '#417bd9'}} title={evaProps => 
                   <View style={{width: '100%' , paddingRight: 35}}>
-                    <Text {...evaProps}>ALERT LEVEL 1!</Text>
+                    <Text {...evaProps} style={{fontWeight: 'bold'}}>ALERT LEVEL 1!</Text>
                     <Text {...evaProps}>Kasalukuyang nakakaranas ng malakas na...</Text>
                     <Text {...evaProps}>June 12, 2022 12:00:00 PM</Text>
                   </View>} accessoryLeft={AlertIcon}/>
