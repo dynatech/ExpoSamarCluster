@@ -9,6 +9,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
 const optionsPerPage = [10, 30, 50];
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const FamilyRiskProfile = () => {
     const [openCalendar, setOpenCalendar] = useState(false);
@@ -184,12 +185,12 @@ const FamilyRiskProfile = () => {
                                 <View>
                                     <Input
                                         style={styles.input}
-                                        placeholder='E.g. XXXYYYZZZ'
+                                        placeholder='Hal. Eugene balbas'
                                         value={temp['household_head']}
                                         defaultValue={member.household_head}
                                         label={evaProps => 
                                             <View style={{flexDirection: 'row'}}>
-                                                <Text {...evaProps}>Household Head </Text>
+                                                <Text {...evaProps}>Pangalan ng household head </Text>
                                                 <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} />
                                             </View>}
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
@@ -218,7 +219,7 @@ const FamilyRiskProfile = () => {
                                     />
                                 </View>
                         }
-                        <View>
+                        {/* <View>
                             <Input
                                 style={styles.input}
                                 placeholder='E.g. XXXYYYZZZ'
@@ -234,7 +235,7 @@ const FamilyRiskProfile = () => {
                                     validateMember(e, 'household_id', temp)
                                 }}
                             />
-                        </View>
+                        </View> */}
                         {/* <View>
                             <Input
                                 style={styles.input}
@@ -251,7 +252,7 @@ const FamilyRiskProfile = () => {
                         <View>
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder='Hal. Male / Lalaki'
                                 value={temp['gender']}
                                 defaultValue={member.gender}
                                 label={evaProps => <Text {...evaProps}>Kasarian</Text>}
@@ -355,7 +356,6 @@ const FamilyRiskProfile = () => {
             <Layout style={{width: '100%', flexDirection: 'row'}}>
                 <Layout style={{ width: props.type && props.type == 1 ? '60%': '60%' }}>
                     <Text category='h6'>{props.type && props.type == 1 ? 'Household Head' : `Household Member #${props.index}`}</Text>
-                    <Text category='s1'>{props.type && props.type == 1 ? 'Ulo ng Sambahayan' : 'Miyembro ng Sambahayan'}</Text>
                 </Layout>
                 {
                     props.type && props.type != 1 &&
@@ -461,7 +461,7 @@ const FamilyRiskProfile = () => {
             backdropStyle={styles.backdrop}
             onBackdropPress={() => setShowDataTable(false)}>
                 <ScrollView>
-                    <Card disabled={true} style={{flex: 1}}>
+                    <Card disabled={true} style={{flex: 1, minHeight: SCREEN_HEIGHT}}>
                         <Layout style={{flexDirection: 'row-reverse', marginBottom: 20}}>
                             <Icon name="close-circle-outline" {...{"style": {"height": 50, "tintColor": "#fff", "width": 50}}}
                                     onPress={()=> setShowDataTable(false)}/>
@@ -483,7 +483,7 @@ const FamilyRiskProfile = () => {
                                 ))
                             }
                         </ScrollView>
-                        <ActionButton buttonColor="rgba(231,76,60,1)" style={{position: 'absolute', left: 0, right: -25, top: screenHeight - 109, }}>
+                        <ActionButton buttonColor="rgba(231,76,60,1)" style={{position: 'absolute', left: 0, right: -25, top: screenHeight - 150, }}>
                             <ActionButton.Item buttonColor='#16526D' title="Add another Household Member" onPress={() => {
                                 handleAdditionalMember();
                             }}>

@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import { StyleSheet, Modal, TouchableHighlight} from 'react-native';
-import { Layout, Text, Input, Button, Select, SelectItem, IndexPath } from '@ui-kitten/components';
+import { StyleSheet, Modal, View} from 'react-native';
+import { Layout, Text, Input, Button, Select, SelectItem, IndexPath, Icon } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
 import SubsurfaceGraph from '../../graphs/SubsurfaceGraph';
@@ -50,8 +50,9 @@ const SubsurfaceData = () => {
                         <Select
                             style={{width: '100%'}}
                             placeholder="             "
-                            label={evaProps => <Text {...evaProps}>Subsurface Graph:</Text>}
-                            caption={evaProps => <Text {...evaProps}>Required</Text>}
+                            label={evaProps => <Text {...evaProps}>Subsurface Plot</Text>}
+                            caption={evaProps => <Text {...evaProps}>Across slope
+                            Pinapakita ng plot ang aktwal na posisyon o itsura ng subsurface sensor nang pakaliwa at pakanan.</Text>}
                             value={selectedViewIndex && VIEW_LIST[selectedViewIndex.row].title}
                             selectedIndex={selectedViewIndex}
                             onSelect={index => setSelectedViewIndex(index)}>
@@ -62,6 +63,9 @@ const SubsurfaceData = () => {
                                 }
                         </Select>
                     </Layout>
+                    <View style={{flexDirection: 'row', padding: 20}}>
+                        <Text style={{textAlign: 'center'}} category="h5" status="basic">Ito ang datos mula sa landslide sensor sa nakaraang 7 na araw</Text>
+                    </View>
                     <Layout style={styles.graph_container}>
                         <SubsurfaceGraph data={subsurfaceData} view={VIEW_LIST[selectedViewIndex.row].view}/>
                     </Layout>

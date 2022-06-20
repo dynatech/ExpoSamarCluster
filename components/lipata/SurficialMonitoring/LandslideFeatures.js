@@ -1,11 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { StyleSheet, Image, Dimensions, ScrollView, View, PermissionsAndroid, TouchableOpacity, ImageBackground} from 'react-native';
-import { Layout, Text, Icon, Input, Select, SelectItem, Autocomplete, AutocompleteItem, Button} from '@ui-kitten/components';
+import { Layout, Text, Icon, Input, Select, SelectItem, Autocomplete, AutocompleteItem, Button, Tooltip} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import moment from 'moment';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Modal from "react-native-modal";
 import CustomConfirm from '../../utils/CustomConfirm';
+import { DataTable } from 'react-native-paper';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -33,6 +34,10 @@ const LandslideFeatures = () => {
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
     const [confirmDescription, setConfirmDescription] = useState({});
+
+    const [petsaTooltip, setPetsaTooltip] = useState(false);
+    const [featureTooltip, setFeatureTooltip] = useState(false);
+    const [lugarTooltip, setLugarTooltip] = useState(false);
 
     const initializeCamera = async () => {
         let options = {
@@ -101,7 +106,7 @@ const LandslideFeatures = () => {
     }
 
     const CameraIcon = (props) => {
-        return <Icon name="camera-outline" {...{"style": {"height": 40, "marginHorizontal": 10, "tintColor": "#32bbf8", "width": 40}}}/>
+        return <Icon name="camera-outline" {...{"style": {"height": 50, "tintColor": "#32bbf8", "width": 50, "marginVertical": -5}}}/>
     }
 
     const ToggleDateTimestamp = () => {
@@ -139,6 +144,27 @@ const LandslideFeatures = () => {
 
     }, []);
 
+    const renderPetsaTooltip = (evaProps) => (
+        <View style={{flexDirection: 'row'}}>
+            <Text {...evaProps}>Petsa at Oras na nakita  </Text>
+            <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} onPress={() => setPetsaTooltip(true)}/>
+        </View>
+    )
+
+    const renderFeatureTooltip = (evaProps) => (
+        <View style={{flexDirection: 'row'}}>
+            <Text {...evaProps}>Landslide feature  </Text>
+            <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} onPress={() => setFeatureTooltip(true)}/>
+        </View>
+    )
+
+    const renderLugarTooltip = (evaProps) => (
+        <View style={{flexDirection: 'row'}}>
+            <Text {...evaProps}>Lugar o Lokasyon  </Text>
+            <Icon name='question-mark-circle-outline' fill='#8994ad' width={17} height={17} onPress={() => setLugarTooltip(true)}/>
+        </View>
+    )
+
     return(
         <Fragment>
             <ScreenHeader title="Landslide Features"/>
@@ -148,20 +174,33 @@ const LandslideFeatures = () => {
                         <View>
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder='Hal. YYYY-MM-DD'
                                 value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
-                                label={evaProps => <Text {...evaProps}>Petsa at Oras na nakita</Text>}
+                                label={evaProps =>                                             
+                                    <Tooltip
+                                        anchor={()=> renderPetsaTooltip({...evaProps})}
+                                        visible={petsaTooltip}
+                                        onBackdropPress={() => setPetsaTooltip(false)}
+                                        placement={'top start'}>
+                                        Kailan ito nakita?
+                                    </Tooltip>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 accessoryRight={CalendarIcon}
-                                // onChangeText={handleChange('household_head')}
-                                // onBlur={handleBlur('household_head')}
                             />
                         </View>
                         <View >
                             <Select
                                 style={{padding: 20}}
                                 placeholder="             "
-                                label={evaProps => <Text {...evaProps}>Landslide feature:</Text>}
+                                // label={evaProps => <Text {...evaProps}>Landslide feature</Text>}
+                                label={evaProps =>                                             
+                                    <Tooltip
+                                        anchor={()=> renderFeatureTooltip({...evaProps})}
+                                        visible={featureTooltip}
+                                        onBackdropPress={() => setFeatureTooltip(false)}
+                                        placement={'top start'}>
+                                        Anong landslide feature ang naobserbahan?
+                                    </Tooltip>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 value={selectedFeatureIndex && feature_list[selectedFeatureIndex.row].feature}
                                 selectedIndex={selectedFeatureIndex}
@@ -175,7 +214,7 @@ const LandslideFeatures = () => {
                         </View>
                         <View>
                             <Autocomplete
-                                placeholder='E.g. Crack A'
+                                placeholder='Hal. Crack A'
                                 value={selectedFeatureName}
                                 style={styles.input}
                                 label={evaProps => <Text {...evaProps}>Feature name:</Text>}
@@ -188,11 +227,19 @@ const LandslideFeatures = () => {
                         <View>
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder='Hal. Sa may skwelahan'
                                 multiline={true}
                                 textStyle={{ minHeight: 40 }}
                                 value={featureLocation}
-                                label={evaProps => <Text {...evaProps}>Lugar o Lokasyon</Text>}
+                                // label={evaProps => <Text {...evaProps}>Lugar o Lokasyon</Text>}
+                                label={evaProps =>                                             
+                                    <Tooltip
+                                        anchor={()=> renderLugarTooltip({...evaProps})}
+                                        visible={lugarTooltip}
+                                        onBackdropPress={() => setLugarTooltip(false)}
+                                        placement={'top start'}>
+                                        {`Saan ito nakita? Gamitin ang mga lokasyon at ${'\n'}pwesto ng kalsada o mga mahahalagang istruktura sa paglarawan ng lokasyon ng feature.`}
+                                    </Tooltip>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 onChangeText={value => setFeatureLocation(value)}
                             />
@@ -200,7 +247,7 @@ const LandslideFeatures = () => {
                         <View>
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder='Hal. Edchelle'
                                 value={reporter}
                                 label={evaProps => <Text {...evaProps}>Reporter</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
@@ -211,7 +258,7 @@ const LandslideFeatures = () => {
                         <View>
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. XXXYYYZZZ'
+                                placeholder=''
                                 multiline={true}
                                 textStyle={{ minHeight: 100 }}
                                 value={narratives}
@@ -222,13 +269,16 @@ const LandslideFeatures = () => {
                         </View>
                         <View style={{textAlign: 'center', flex: 1, alignItems: 'center'}}>
                             <Text>Attach / Take photo(s)</Text>
-                            <Button
-                                appearance='ghost'
-                                status='info'
-                                style={styles.button}
-                                accessoryRight={CameraIcon} onPress={()=> {
-                                    initializeCamera();
-                                }}/>
+                            <View style={{height: 80, minHeight: 80, borderWidth: 5, borderRadius: 100, borderColor: '#32bbf8', marginTop: 5}}>
+                                <Button
+                                    appearance='ghost'
+                                    status='info'
+                                    style={styles.button}
+                                    accessoryRight={CameraIcon} onPress={()=> {
+                                        // initializeCamera();
+                                    }}/>
+                            </View>
+
                         </View>
                         <View style={{textAlign: 'center', flex: 1, alignItems: 'center'}}>
                             <ScrollView horizontal={true}>
@@ -256,6 +306,76 @@ const LandslideFeatures = () => {
                                 })
                                 setDisplayConfirm(true);
                             }}>Submit</Button>
+                        </View>
+                        <View>
+                            <View style={{flexDirection: 'row', padding: 20}}>
+                                <Text style={{textAlign: 'center', width: '100%'}} category="h6" status="basic">Manifestation of Movement Observations</Text>
+                            </View>
+                            <ScrollView horizontal={true}>
+                                <View style={{width: 600, backgroundColor: '#ffffff20'}}>
+                                    <DataTable>
+                                        <DataTable.Header>
+                                            <DataTable.Title ><Text style={{color: 'white'}}>Petsa at Oras</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Feature</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Feature name</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Reporter</Text></DataTable.Title>
+                                            <DataTable.Title numeric><Text style={{color: 'white'}}>Action</Text></DataTable.Title>
+                                        </DataTable.Header>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2012-01-01</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Edchelle</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2012-01-01</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Edchelle</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                        <DataTable.Row>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2012-01-01</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>Edchelle</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric>
+                                                <View style={{flexDirection: 'row'}}>
+                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
+                                                </View>
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                    </DataTable>
+                                </View>
+                            </ScrollView>
+                            <Layout level="1" style={{flexDirection: 'row-reverse', marginTop: 10, marginBottom: 10}}>
+                                <Layout style={{flexDirection: 'row'}}>
+                                    <Icon name="arrow-left-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("LEFT")}}/>
+                                    <Icon name="arrow-right-outline" 
+                                        {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 25}}}
+                                        onPress={()=> {console.log("RIGHT")}}/>
+                                </Layout>
+                                <Layout style={{marginRight: 10}}>
+                                    <Text>Page 1 of 4</Text>
+                                </Layout>
+                            </Layout>
+                            <Layout>
+                                <Button status="warning">Download</Button>
+                            </Layout>
                         </View>
                     </Layout>
                 </ScrollView>
