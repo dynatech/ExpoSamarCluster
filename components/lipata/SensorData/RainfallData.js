@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { StyleSheet, Modal, TouchableHighlight} from 'react-native';
+import { StyleSheet, Modal, View} from 'react-native';
 import CustomProgressiveImage from '../../utils/CustomProgressiveImage';
 import { Layout, Text, Input, Button, Select, SelectItem, IndexPath } from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
@@ -21,11 +21,13 @@ const RainfallData = () => {
     const VIEW_LIST = [
         {
             view: 'instantaneous',
-            title: 'Instantaneous Rainfall Data'
+            title: 'Instantaneous Rainfall Data',
+            caption: 'Ito ang aktwal na datos ng pag-ulan na naranasan sa loob ng 15 na minuto. Ang mga blue na bahagi sa plot ay nangangahulugan ng kawalan ng datos.'
         },
         {
             view: 'cumulative',
-            title: 'Cumulative Rainfall Data'
+            title: 'Cumulative Rainfall Data',
+            caption: 'Ito ang pinagsama-samang dami ng ulan sa loob ng 1 (blue) at 3 (red) na araw. Ipinapakita ng mga broken line sa plot ang threshold ng ulan para sa site. Kapag lumagpas ang blue o red line sa kani-kanilang thresholds, maaaring magtaas ng alert.'
         },
     ]
 
@@ -58,7 +60,7 @@ const RainfallData = () => {
                             style={{width: '100%'}}
                             placeholder="             "
                             label={evaProps => <Text {...evaProps}>Rainfall Graph:</Text>}
-                            caption={evaProps => <Text {...evaProps}>Required</Text>}
+                            caption={evaProps => <Text style={{textAlign: 'center', fontSize: 12, color: "#c2f1ff"}}>{selectedViewIndex && VIEW_LIST[selectedViewIndex.row].caption}</Text>}
                             value={selectedViewIndex && VIEW_LIST[selectedViewIndex.row].title}
                             selectedIndex={selectedViewIndex}
                             onSelect={index => setSelectedViewIndex(index)}>
@@ -69,6 +71,9 @@ const RainfallData = () => {
                                 }
                         </Select>
                     </Layout>
+                    <View style={{flexDirection: 'row', padding: 20}}>
+                        <Text style={{textAlign: 'center', paddingLeft: 10}} category="p1" status="basic">Ito ang datos mula sa landslide sensor sa nakaraang 7 na araw</Text>
+                    </View>
                     <Layout style={styles.graph_container}>
                         <RainfallGraph data={rainfallData} setGaugeNames={setGaugeNames} selectedViewIndex={VIEW_LIST[selectedViewIndex.row].view} selectedGaugeName={gaugeNames.length != 0 ? gaugeNames[selectedGaugeName.row].title : []}/>
                     </Layout>

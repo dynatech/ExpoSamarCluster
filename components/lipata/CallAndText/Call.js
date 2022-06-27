@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { StyleSheet, Dimensions, Linking, View } from 'react-native';
-import { Layout, Button, Divider, List, ListItem, Icon, Input, Text, Modal, Card } from '@ui-kitten/components';
+import { Layout, Button, Divider, List, ListItem, Icon, Input, Text, Modal, Card, Select, SelectItem,} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -72,7 +72,8 @@ const Call = (props) => {
                     isDialPadOpen ? <DialPad setMobileNumber={setMobileNumber} 
                                         mobileNumber={mobileNumber} 
                                         setShowContactDetail={setShowContactDetail} 
-                                        setIsUpdate={setIsUpdate}/> 
+                                        setIsUpdate={setIsUpdate} 
+                                        setTempName={setTempName}/>
                     : 
                         <Layout style={styles.contact_list_layout}>
                             <List
@@ -168,7 +169,7 @@ const ChatIcon = (props) => {
 }
 
 const DialPad = (props) => {
-    const { setMobileNumber, mobileNumber, setShowContactDetail, setIsUpdate } = props;
+    const { setMobileNumber, mobileNumber, setShowContactDetail, setIsUpdate, setTempName } = props;
 
     const data = new Array(9).fill();
     let key_pad = [];
@@ -187,6 +188,7 @@ const DialPad = (props) => {
         if (mobileNumber.length >= 7) {
             setIsUpdate(false)
             setShowContactDetail(true)
+            setTempName("NEW")
         }
     }}></Button>)
     key_pad.push(<Button key="0" style={styles.dial_key} onPress={()=> {

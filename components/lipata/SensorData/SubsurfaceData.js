@@ -14,27 +14,33 @@ const SubsurfaceData = () => {
     const VIEW_LIST = [
         {
             view: 'cp-a',
-            title: 'Column Position: Across Slope'
+            title: 'Column Position: Across Slope',
+            caption: `Pinapakita ng plot ang aktwal na posisyon o itsura ng subsurface sensor nang pakaliwa at pakanan.`
         },
         {
             view: 'cp-d',
-            title: 'Column Position: Downslope'
+            title: 'Column Position: Downslope',
+            caption: `Pinapakita ng plot ang aktwal na posisyon o itsura ng subsurface sensor nang paharap at palikod.`
         },
         {
             view: 'dp-a',
-            title: 'Displacement Plot: Across Slope'
+            title: 'Displacement Plot: Across Slope',
+            caption: `Pinapakita ng plot ang paggalaw sa ilalim ng lupa nang pakaliwa at pakanan base sa nakaraan nitong posisyon.`
         },
         {
             view: 'dp-d',
-            title: 'Displacement Plot: Downslope'
+            title: 'Displacement Plot: Downslope',
+            caption: `Pinapakita ng plot ang paggalaw sa ilalim ng lupa nang paharap at palikod base sa nakaraan nitong posisyon.`
         },
         {
             view: 'va-a',
-            title: 'Velocity Alerts Plot: Across Slope'
+            title: 'Velocity Alerts Plot: Across Slope',
+            caption: `Pinapakita ng plot ang bilis ng paggalaw sa ilalim ng lupa nang pakaliwa at pakanan. Ang dilaw na tatsulok sa plot ay naglalarawan ng paggalaw sa ilalim ng lupa, samantalang ang pulang tatsulok ay naglalarawan ng kritikal na paggalaw sa ilalim ng lupa.`
         },
         {
             view: 'va-d',
-            title: 'Velocity Alerts Plot:  Downslope'
+            title: 'Velocity Alerts Plot:  Downslope',
+            caption: `Pinapakita ng plot ang bilis ng paggalaw sa ilalim ng lupa nang paharap at palikod. Ang dilaw na tatsulok sa plot ay naglalarawan ng paggalaw sa ilalim ng lupa, samantalang ang pulang tatsulok ay naglalarawan ng kritikal na paggalaw sa ilalim ng lupa.`
         },
     ]
 
@@ -51,8 +57,7 @@ const SubsurfaceData = () => {
                             style={{width: '100%'}}
                             placeholder="             "
                             label={evaProps => <Text {...evaProps}>Subsurface Plot</Text>}
-                            caption={evaProps => <Text {...evaProps}>Across slope
-                            Pinapakita ng plot ang aktwal na posisyon o itsura ng subsurface sensor nang pakaliwa at pakanan.</Text>}
+                            caption={evaProps => <Text style={{textAlign: 'center', fontSize: 12, color: "#c2f1ff"}}>{selectedViewIndex && VIEW_LIST[selectedViewIndex.row].caption}</Text>}
                             value={selectedViewIndex && VIEW_LIST[selectedViewIndex.row].title}
                             selectedIndex={selectedViewIndex}
                             onSelect={index => setSelectedViewIndex(index)}>
@@ -64,7 +69,7 @@ const SubsurfaceData = () => {
                         </Select>
                     </Layout>
                     <View style={{flexDirection: 'row', padding: 20}}>
-                        <Text style={{textAlign: 'center'}} category="h5" status="basic">Ito ang datos mula sa landslide sensor sa nakaraang 7 na araw</Text>
+                        <Text style={{textAlign: 'center', paddingLeft: 10}} category="p1" status="basic">Ito ang datos mula sa landslide sensor sa nakaraang 7 na araw</Text>
                     </View>
                     <Layout style={styles.graph_container}>
                         <SubsurfaceGraph data={subsurfaceData} view={VIEW_LIST[selectedViewIndex.row].view}/>
