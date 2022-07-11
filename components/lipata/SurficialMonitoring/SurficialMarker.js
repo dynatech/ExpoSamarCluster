@@ -27,11 +27,15 @@ const SurficialMarker = () => {
         {panahon: 'Maaraw'},
         {panahon: 'Maulan'},
         {panahon: 'Maambon'},
-        {panahon: 'Maulap'},
+        {panahon: 'Makulimlim'},
     ]
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
+    }
+
+    const CMIcon = (props) => {
+        return <View><Text>CM</Text></View>
     }
 
     const ToggleDateTimestamp = () => {
@@ -66,17 +70,19 @@ const SurficialMarker = () => {
                                     <Input
                                         key={index}
                                         style={styles.input_group}
-                                        placeholder='Hal. 12cm'
+                                        placeholder='Hal. 12.23'
                                         // value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
                                         label={evaProps => 
-                                            <Text {...evaProps}>Sukat ni {row.name}  </Text>
+                                            <Text {...evaProps}>{row.name}  </Text>
                                         }
+                                        keyboardType='numeric'
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                        onChangeText={(e)=> {
+                                        onChangeText={(e)=> {       
                                             let temp = {...markerMeasurement};
                                             temp[row.name] = e;
                                             setMarkerMeasurement(temp);
                                         }}
+                                        accessoryRight={CMIcon}
                                         // onBlur={handleBlur('household_head')}
                                     />
                                 ))
@@ -102,9 +108,9 @@ const SurficialMarker = () => {
                         <View >
                             <Input
                                 style={styles.input}
-                                placeholder='E.g. Johann Sahagun'
+                                placeholder='Hal. Johann Sahagun'
                                 value={reporter}
-                                label={evaProps => <Text {...evaProps}>Pangalan ng nag sukat</Text>}
+                                label={evaProps => <Text {...evaProps}>Pangalan ng mga nagsukat</Text>}
                                 caption={evaProps => <Text {...evaProps}>Required</Text>}
                                 onChangeText={e => setReporter(e)}
                                 // onBlur={handleBlur('household_head')}
@@ -133,7 +139,7 @@ const SurficialMarker = () => {
             />
             <CustomConfirm 
                 title={"Sigurado ka ba?"}
-                caption={`A: 23cm, B: 32cm, C: 11cm ${'\n'} Nagsukat: Johan Sahagun`} // template for submitting
+                caption={`Date & time: ${moment(datetimestamp).format("LLL")} ${'\n'} Panahon: ${selectedPanahonIndex != null ? panahon_list[selectedPanahonIndex.row].panahon: "N/A"} ${'\n'}  A: 23cm, B: 32cm, C: 11cm ${'\n'} Nagsukat: ${reporter}`} // template for submitting
                 displayConfirm={displayConfirm}
                 confirmStatus={"notify"}
                 setDisplayConfirm={setDisplayConfirm}

@@ -381,7 +381,7 @@ const FamilyRiskProfile = () => {
                 >   
                     <View>
                         <View style={{flexDirection: 'row', padding: 20}}>
-                            <Icon name='question-mark-circle-outline' fill='#8994ad' width={25} height={25} onPress={() => setVisible(true)}/>
+                            <Icon name='question-mark-circle-outline' fill='#8994ad' width={25} height={25}/>
                             <Text style={{textAlign: 'center'}} category="h6" status="basic">Nakalista dito ang mga households na at-risk sa landslide</Text>
                         </View>
                         <ScrollView horizontal={true}>

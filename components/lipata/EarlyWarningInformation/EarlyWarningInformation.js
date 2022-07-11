@@ -1,15 +1,17 @@
 import React, { Fragment, useState } from 'react';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, ScrollView } from 'react-native';
 import { Layout, Text, Button} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import { ImageStyle } from '../../../styles/image_style';
 import CustomConfirm from '../../utils/CustomConfirm';
+import moment from 'moment';
 
 const data = {
     
 }
 
 const EarlyWarningInformation = () => {
+    const [isAcked, setIsAcked] = useState(false);
     const [displayConfirm, setDisplayConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState("success");
 
@@ -49,25 +51,51 @@ const EarlyWarningInformation = () => {
     return(
         <Fragment>
             <ScreenHeader title="Early Warning Information"/>
-            <Layout style={styles.container} level='1'>
-                <Layout style={styles.alert_content_section}>
-                    <Text style={alert_level == 3 ? 
-                        styles.level3 : 
-                        alert_level == 2 ? styles.level2 : 
-                        alert_level == 1 ? styles.level1 : 
-                        styles.level0} category="h3">Alert Level {alert_level}</Text>
-                    <RenderAlertLevelImage eventDetails={{alert_level: 2, alert_triggers: "e"}}/>
-                    <Text category="h6">Community</Text>
-                    <Text category="h6">(LEWC, BLGU)</Text>
-                    <Text category="h6">recommended response</Text>
-                    <Text category="h5" style={{color: '#F8991D'}}>{`Prepare to Evacuate`}</Text>
-                    <Text category="h6" style={{paddingTop: 30}}>Weather Updates</Text>
-                    <Text category="h6" >Maulan</Text>
-                    <Button status="warning" style={{marginTop: 30}} onPress={()=> setDisplayConfirm(true)}>
-                        <Text>ACKNOWLEDGE</Text>
-                    </Button>   
+            <ScrollView>
+                <Layout style={styles.container} level='1'>
+                    <Layout style={styles.alert_content_section}>
+                        <Text style={alert_level == 3 ? 
+                            styles.level3 : 
+                            alert_level == 2 ? styles.level2 : 
+                            alert_level == 1 ? styles.level1 : 
+                            styles.level0} category="h3">Alert Level {alert_level}</Text>
+                        <RenderAlertLevelImage eventDetails={{alert_level: 2, alert_triggers: "e"}}/>
+                        <Layout style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <Text category="h5">{`Lugar: `}</Text>
+                            <Text category="h5" style={{fontWeight: '400'}}>{`Brgy. Lipata, Paranas, Samar`}</Text>
+                        </Layout>
+                        <Layout style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <Text category="h5">{`Petsa at oras: `}</Text>
+                            <Text category="h5" style={{fontWeight: '400'}}>{moment().format("LLL")}</Text>
+                        </Layout>
+                        <Layout style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <Text category="h5">{`Bakit (Surficial Markers): `}</Text>
+                            <Text category="h5" style={{fontWeight: '400'}}>May dako nga pagbabag-o ha surficial marker.</Text>
+                        </Layout>
+                        <Layout style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <Text category="h5">{`Responde: `}</Text>
+                            <Text category="h5" style={[styles.level2, {fontWeight: '400'}]}>Pag-andam han iyo importante nga mga gamit para han posibilidad nga pag-evacuate</Text>
+                        </Layout>
+                        <Layout style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <Text category="h5">{`Source: `}</Text>
+                            <Text category="h5">Paranas, MDRRMO</Text>
+                        </Layout>
+                        <Button status={isAcked ? "success" : "warning"} style={{marginTop: 30}} onPress={()=> {
+                            setDisplayConfirm(true);
+                        }}>
+                            <Text>ACKNOWLEDGE</Text>
+                        </Button>
+                        {
+                            isAcked && 
+                                <Button status="primary" style={{margin: 10}} onPress={()=> {
+
+                                }}>
+                                    <Text>Send to household at risk</Text>
+                                </Button>
+                        }
+                    </Layout>
                 </Layout>
-            </Layout>
+            </ScrollView>
             <CustomConfirm 
                 title={"EWI"}
                 caption={"Early warning information Acknowledged!"}
@@ -76,6 +104,7 @@ const EarlyWarningInformation = () => {
                 setDisplayConfirm={setDisplayConfirm}
                 callback={(stat)=> {
                     setDisplayConfirm(false);
+                    setIsAcked(true);
             }}/>
         </Fragment>
     )
@@ -91,7 +120,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     alert_content_section: {
-        paddingTop: 50,
+        padding: 40,
         flex: 1,
         alignItems: 'center',
     },
