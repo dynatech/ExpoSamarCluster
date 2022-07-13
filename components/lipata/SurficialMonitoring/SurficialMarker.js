@@ -138,7 +138,7 @@ const SurficialMarker = () => {
                 }}
             />
             <CustomConfirm 
-                title={"Sigurado ka ba?"}
+                title={"I-submit?"}
                 caption={`Date & time: ${moment(datetimestamp).format("LLL")} ${'\n'} Panahon: ${selectedPanahonIndex != null ? panahon_list[selectedPanahonIndex.row].panahon: "N/A"} ${'\n'}  A: 23cm, B: 32cm, C: 11cm ${'\n'} Nagsukat: ${reporter}`} // template for submitting
                 displayConfirm={displayConfirm}
                 confirmStatus={"notify"}

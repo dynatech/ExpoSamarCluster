@@ -15,11 +15,13 @@ const ActivitySchedule = () => {
     const [openCalendar, setOpenCalendar] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
     const [openForm, setOpenForm] = useState(false);
+    const [openDetails, setOpenDetails] = useState(false);
     const [datetimestamp, setDateTimestamp] = useState(new Date());
     const [imageFiles, setImageFiles] = useState([]);
     const [viewImage, setViewImage] = useState(null);
     const [openImageViewer, setOpenImageViewer] = useState(false);
     const [activityDetails, setActivityDetails] = useState("");
+    const [selectedActivity, setSelectedActivity] = useState(null);
     const [reporter, setReporter] = useState("");
     const [paksa, setPaksa] = useState("");
     const [activities, setActivities] = useState(
@@ -140,7 +142,7 @@ const ActivitySchedule = () => {
             },
             saveToPhotos: true
         };
-        
+
         launchImageLibrary(options, (res) => {
             if (res.didCancel) {
                 console.log('User cancelled image picker');
@@ -154,6 +156,11 @@ const ActivitySchedule = () => {
                 setImageFiles([...imageFiles, res.assets[0]]);
             }
         });
+    }
+
+    const ViewDetails = (item) => { 
+        setSelectedActivity(item)
+        setOpenDetails(true);
     }
 
     return(
@@ -181,7 +188,10 @@ const ActivitySchedule = () => {
                             pastScrollRange={50}
                             futureScrollRange={50}
                             renderItem={(item, firstItemInDay) => {
-                                return <TouchableOpacity style={{marginTop: 20, padding: 10, backgroundColor: 'white', width: '95%'}} onPress={()=> {console.log("PRESS ME")}}>
+                                return <TouchableOpacity style={{marginTop: 20, padding: 10, backgroundColor: 'white', width: '95%'}} onPress={()=> {
+                                    //
+                                    ViewDetails(item);
+                                }}>
                                         <View style={{flex: 1, flexDirection: 'row'}}>
                                             <View style={{flex: 1}}>
                                                 <View>
@@ -269,6 +279,62 @@ const ActivitySchedule = () => {
                     <Button status="info">Add Event</Button>
                 </Layout> */}
             </Layout>
+            <Mod      
+                style={{width: '100%', height: '100%'}}
+                visible={openDetails}
+                backdropStyle={styles.backdrop}
+                onBackdropPress={() => setOpenDetails(false)}>
+                <Card disabled={true} style={{flex: 1}}>
+                    <Layout style={{flexDirection: 'row-reverse', marginBottom: 20}}>
+                        <Icon name="close-circle-outline" {...{"style": {"height": 50, "tintColor": "#fff", "width": 50}}}
+                                onPress={()=> setOpenDetails(false)}/>
+                    </Layout>
+                    <ScrollView>
+                        <Layout style={{justifyContent: 'center', paddingBottom: 60}}>
+                            <Layout>
+                                <Input
+                                    style={styles.input}
+                                    // placeholder={}
+                                    value={selectedActivity && selectedActivity.time}
+                                    label={evaProps => <Text {...evaProps}>Petsa at Oras</Text>}
+                                    editable={false}
+                                    InputProps
+                                    // caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                    // onChangeText={value => setReporter(value)}
+                                />
+                            </Layout>
+                            <Layout>
+                                <Input
+                                    style={styles.input}
+                                    placeholder='Hal. Juan Dela Cruz'
+                                    // value={reporter}
+                                    value={selectedActivity && selectedActivity.name}
+                                    label={evaProps => <Text {...evaProps}>Paksa</Text>}
+                                    editable={false}
+                                    // caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                    // onChangeText={value => setReporter(value)}
+                                />   
+                            </Layout>
+                            <Layout>
+                                <Input
+                                    style={styles.input}
+                                    placeholder='Hal. Juan Dela Cruz'
+                                    // value={reporter}
+                                    value={selectedActivity && selectedActivity.description}
+                                    label={evaProps => <Text {...evaProps}>Detalye</Text>}
+                                    editable={false}
+                                    multiline={true}
+                                    textStyle={{ minHeight: 300 }}
+                                    // caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                    // onChangeText={value => setReporter(value)}
+                                />
+                            </Layout>
+                        </Layout>
+                    </ScrollView>
+                </Card>
+            </Mod>
+
+
             <Mod      
                 style={{width: '100%', height: '100%'}}
                 visible={openForm}
