@@ -7,6 +7,8 @@ import Modal from 'react-native-modal';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
+import CustomConfirm from '../../utils/CustomConfirm';
+
 import moment from 'moment';
 
 const ActivitySchedule = () => {
@@ -17,6 +19,28 @@ const ActivitySchedule = () => {
     const [imageFiles, setImageFiles] = useState([]);
     const [viewImage, setViewImage] = useState(null);
     const [openImageViewer, setOpenImageViewer] = useState(false);
+    const [activityDetails, setActivityDetails] = useState("");
+    const [reporter, setReporter] = useState("");
+    const [paksa, setPaksa] = useState("");
+    const [activities, setActivities] = useState(
+        {
+            '2022-04-22': [{name: 'Pagpupulong', time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}, {name: 'Dinner', time: '12 AM - 1 PM', description: 'Meeting tungkol sa Dinner'}],
+            '2022-04-23': [{name: 'item 2 - any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}],
+            '2022-05-24': [],
+            '2022-04-24': [{name: 'item 3 - any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}, {name: 'any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}]
+        }
+    );
+
+    const [displayConfirm, setDisplayConfirm] = useState(false);
+    const [confirmStatus, setConfirmStatus] = useState("success");
+    const [confirmDescription, setConfirmDescription] = useState({});
+
+    const [markedDates, setMarkedDates] = useState({
+        '2022-04-22': {marked: true},
+        '2022-04-23': {marked: true},
+        '2022-05-22': {marked: true},
+        '2022-04-24': {marked: true},
+    });
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
@@ -104,12 +128,7 @@ const ActivitySchedule = () => {
                 <Layout style={{flex: 1, width: '100%'}}>
                     {/* { Add loading } */}
                         <Agenda
-                            items={{
-                                '2022-04-22': [{name: 'Pagpupulong', time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}],
-                                '2022-04-23': [{name: 'item 2 - any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}],
-                                '2022-05-24': [],
-                                '2022-04-24': [{name: 'item 3 - any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}, {name: 'any js object',  time: '10 AM - 12 PM', description: 'Meeting tungkol sa lunch'}]
-                            }}
+                            items={activities}
                             loadItemsForMonth={month => {
                                 console.log('trigger items loading');
                             }}
@@ -162,12 +181,7 @@ const ActivitySchedule = () => {
                                 return <View />;
                             }}
                             showClosingKnob={false}
-                            markedDates={{
-                                '2022-04-22': {selected: true, marked: true},
-                                '2022-04-23': {marked: true},
-                                '2022-05-22': {marked: true},
-                                '2022-04-24': {marked: true},
-                            }}
+                            markedDates={markedDates}
                             disabledByDefault={false}
                             onRefresh={() => console.log('refreshing...')}
                             refreshing={false}
@@ -236,12 +250,14 @@ const ActivitySchedule = () => {
                                 <Layout style={{flex: 0.8}}>
                                     <Input
                                         style={styles.input}
-                                        placeholder='E.g. XXXYYYZZZ'
+                                        placeholder='Hal. XXXYYYZZZ'
                                         value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
                                         label={evaProps => <Text {...evaProps}>Petsa at Oras</Text>}
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
                                         accessoryRight={CalendarIcon}
-                                        // onChangeText={handleChange('household_head')}
+                                        // onChangeText={(e) => {
+                                        //     console.log(e);
+                                        // }}
                                         // onBlur={handleBlur('household_head')}
                                     />
                                 </Layout>
@@ -259,23 +275,33 @@ const ActivitySchedule = () => {
                                 <Layout>
                                     <Input
                                         style={styles.input}
-                                        placeholder='E.g. XXXYYYZZZ'
-                                        multiline={true}
-                                        textStyle={{ minHeight: 300 }}
-                                        // value={featureLocation}
-                                        label={evaProps => <Text {...evaProps}>Activity details</Text>}
+                                        placeholder='Hal. Pagpupulong'
+                                        value={paksa}
+                                        label={evaProps => <Text {...evaProps}>Paksa</Text>}
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                        // onChangeText={value => setFeatureLocation(value)}
+                                        onChangeText={value => setPaksa(value)}
                                     />
                                 </Layout>
                                 <Layout>
                                     <Input
                                         style={styles.input}
-                                        placeholder='E.g. Juan Dela Cruz'
-                                        // value={featureLocation}
+                                        placeholder='Hal. XXXYYYZZZ'
+                                        multiline={true}
+                                        textStyle={{ minHeight: 300 }}
+                                        value={activityDetails}
+                                        label={evaProps => <Text {...evaProps}>Activity details</Text>}
+                                        caption={evaProps => <Text {...evaProps}>Required</Text>}
+                                        onChangeText={value => setActivityDetails(value)}
+                                    />
+                                </Layout>
+                                <Layout>
+                                    <Input
+                                        style={styles.input}
+                                        placeholder='Hal. Juan Dela Cruz'
+                                        value={reporter}
                                         label={evaProps => <Text {...evaProps}>Reporter</Text>}
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
-                                        // onChangeText={value => setFeatureLocation(value)}
+                                        onChangeText={value => setReporter(value)}
                                     />
                                 </Layout>
                                 <Layout>
@@ -298,7 +324,36 @@ const ActivitySchedule = () => {
                                     </View>
                                 </Layout>
                                 <Layout>
-                                    <Button status="info" style={{margin: 10}}>Save activity</Button>
+                                    <Button status="info" style={{margin: 10}} onPress={()=> {
+                                        let date = moment(datetimestamp).format("YYYY-MM-DD");
+
+                                        let tempActivities = {...activities};
+                                        let tempKeyValue = tempActivities[date];
+                                        if (tempKeyValue) {
+                                            tempActivities[date].push({
+                                                name: `${paksa} (${reporter})`,
+                                                time: moment(datetimestamp).format("hh:mm:ss A"),
+                                                description: activityDetails
+                                            })
+                                        } else {
+                                            tempActivities[date] = [{
+                                                name: `${paksa} (${reporter})`,
+                                                time: moment(datetimestamp).format("hh:mm:ss A"),
+                                                description: activityDetails
+                                            }]
+                                        }
+                                        setActivities(tempActivities);
+
+                                        let tempMarkedDates = {...markedDates};
+                                        tempMarkedDates[date] = {marked: true};
+                                        setMarkedDates(tempMarkedDates);
+
+                                        setConfirmDescription({
+                                            title: 'Successfully added!',
+                                            caption: `${paksa} - ${reporter}`
+                                        })
+                                        setDisplayConfirm(true);
+                                    }}>Save activity</Button>
                                 </Layout>
                             </Layout>
                         </Layout>
@@ -331,6 +386,17 @@ const ActivitySchedule = () => {
                         <ImageBackground source={{uri: viewImage.uri}} resizeMode='cover' style={{flex: 1}} />
                 }
             </Modal>
+            <CustomConfirm 
+                title={confirmDescription.title}
+                caption={confirmDescription.caption}
+                displayConfirm={displayConfirm}
+                confirmStatus={confirmStatus}
+                setDisplayConfirm={setDisplayConfirm}
+                callback={()=> {
+                 setDisplayConfirm(false);
+                 setOpenForm(false);
+                }}
+             /> 
         </Fragment>
     )
 }

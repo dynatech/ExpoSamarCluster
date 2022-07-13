@@ -27,7 +27,7 @@ const RainfallData = () => {
         {
             view: 'cumulative',
             title: 'Cumulative Rainfall Data',
-            caption: 'Ito ang pinagsama-samang dami ng ulan sa loob ng 1 (blue) at 3 (red) na araw. Ipinapakita ng mga broken line sa plot ang threshold ng ulan para sa site. Kapag lumagpas ang blue o red line sa kani-kanilang thresholds, maaaring magtaas ng alert.'
+            caption: 'Ito ang pinagsama-samang dami ng ulan sa loob ng 1 (blue) at 3 (red) na araw. Ipinapakita ng mga broken line sa plot ang threshold ng ulan para sa site. Kapag lumagpas ang blue o red line sa kani-kanilang thresholds, maaaring itaas sa alert level 1'
         },
     ]
 
@@ -71,9 +71,6 @@ const RainfallData = () => {
                                 }
                         </Select>
                     </Layout>
-                    <View style={{flexDirection: 'row', padding: 20}}>
-                        <Text style={{textAlign: 'center', paddingLeft: 10}} category="p1" status="basic">Ito ang datos mula sa landslide sensor sa nakaraang 7 na araw</Text>
-                    </View>
                     <Layout style={styles.graph_container}>
                         <RainfallGraph data={rainfallData} setGaugeNames={setGaugeNames} selectedViewIndex={VIEW_LIST[selectedViewIndex.row].view} selectedGaugeName={gaugeNames.length != 0 ? gaugeNames[selectedGaugeName.row].title : []}/>
                     </Layout>
