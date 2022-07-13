@@ -19,7 +19,6 @@ export function DrawerContent(props) {
   useEffect(()=> {
     MobileCaching.getItem('credentials').then(response => {
       if (response) {
-        console.log(response);
         setFullname(`${response.data.user.first_name} ${response.data.user.last_name}`);
         setDesignation(`${response.data.profile.designation_details.designation}`)
       }

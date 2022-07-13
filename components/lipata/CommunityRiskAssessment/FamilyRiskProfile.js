@@ -54,10 +54,6 @@ const FamilyRiskProfile = () => {
         setPage(0);
     }, [itemsPerPage]);
 
-    useEffect(()=> {
-        console.log("dataSourceCords:", dataSourceCords);
-    }, [dataSourceCords]);
-
     const AddIcon = () => (
         <Icon name='plus-square-outline' {...{"style": {"height": 20, "marginHorizontal": 10, "tintColor": "#fff", "width": 20}}} />
     );
@@ -85,8 +81,6 @@ const FamilyRiskProfile = () => {
                 y: coords[coords.length-1],
                 animated: true,
               });
-        } else {
-            console.log(coords)
         }
       };
      
@@ -299,7 +293,6 @@ const FamilyRiskProfile = () => {
                                 checked={temp['buntis']}
                                 onChange={nextChecked => {
                                     temp['buntis'] = nextChecked
-                                    console.log(nextChecked)
                                 } }>
                                 Buntis
                             </CheckBox>

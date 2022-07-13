@@ -90,13 +90,14 @@ const RainfallGraph = (props) => {
         return {
             graph_view: 'cumulative',
             gauge_name: gauge_name.toUpperCase(),
+            distance: distance,
             series: series_data,
             chart: {
                 type: "line",
                 zoomType: "x",
                 panning: true,
                 panKey: "shift",
-                height: 600,
+                height: 400,
                 resetZoomButton: {
                     position: {
                         x: 0,
@@ -170,6 +171,7 @@ const RainfallGraph = (props) => {
         return {
             graph_view: 'instantaneous',
             gauge_name: gauge_name.toUpperCase(),
+            distance: distance,
             series: max_rval_data,
             chart: {
                 type: "column",
@@ -251,7 +253,7 @@ const RainfallGraph = (props) => {
                 let exists = temp.find(o => o.value == element.gauge_name);
                 if (!exists) {
                     temp.push({
-                        title: element.gauge_name.toUpperCase(),
+                        title: `${element.gauge_name.toUpperCase()} (${element.distance}km away)`,
                         value: element.gauge_name
                     });
                 }

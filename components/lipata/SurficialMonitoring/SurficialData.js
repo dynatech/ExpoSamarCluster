@@ -33,7 +33,7 @@ const SurficialData = () => {
                 </Layout>
                 <Layout style={[styles.container, {paddingBottom: 50}]} level='1'>
                     <Layout style={styles.layout}>
-                        <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Manifestation of Movements as of {moment().format("MMMM D, YYYY")}</Text>
+                        <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Surficial Marker Data as of {moment().format("MMMM D, YYYY")}</Text>
                     </Layout>
                     <KeyboardAvoidingView
                         style={{height: '100%'}}
@@ -44,40 +44,16 @@ const SurficialData = () => {
                                     <DataTable>
                                         <DataTable.Header>
                                             <DataTable.Title><Text style={{color: 'white'}}>Petsa</Text></DataTable.Title>
-                                            <DataTable.Title ><Text style={{color: 'white'}}>Feature</Text></DataTable.Title>
-                                            <DataTable.Title><Text style={{color: 'white'}}>Feature Name</Text></DataTable.Title>
-                                            <DataTable.Title><Text style={{color: 'white'}}>Reporter</Text></DataTable.Title>
+                                            <DataTable.Title ><Text style={{color: 'white'}}>Crack A</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Crack B</Text></DataTable.Title>
+                                            <DataTable.Title><Text style={{color: 'white'}}>Crack C</Text></DataTable.Title>
                                             <DataTable.Title numeric><Text style={{color: 'white'}}>Action</Text></DataTable.Title>
                                         </DataTable.Header>
                                         <DataTable.Row>
                                             <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
-                                            <DataTable.Cell numeric>
-                                                <View style={{flexDirection: 'row'}}>
-                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
-                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
-                                                </View>
-                                            </DataTable.Cell>
-                                        </DataTable.Row>
-                                        <DataTable.Row>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
-                                            <DataTable.Cell numeric>
-                                                <View style={{flexDirection: 'row'}}>
-                                                    <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
-                                                    <Icon name="trash-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
-                                                </View>
-                                            </DataTable.Cell>
-                                        </DataTable.Row>
-                                        <DataTable.Row>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>2016-08-16</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>Crack A</Text></DataTable.Cell>
-                                            <DataTable.Cell><Text style={{color: 'white'}}>John</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>2.3cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>4.2cm</Text></DataTable.Cell>
+                                            <DataTable.Cell><Text style={{color: 'white'}}>29cm</Text></DataTable.Cell>
                                             <DataTable.Cell numeric>
                                                 <View style={{flexDirection: 'row'}}>
                                                     <Icon name="edit-outline" {...{"style": {"height": 20, "marginHorizontal": 5, "tintColor": "#fff", "width": 25}}}/>
@@ -107,7 +83,7 @@ const SurficialData = () => {
                         </View>
                     </KeyboardAvoidingView>
                 </Layout>
-                <Layout style={[styles.container, {paddingTop: 40, paddingBottom: 50}]} level='1'>
+                {/* <Layout style={[styles.container, {paddingTop: 40, paddingBottom: 50}]} level='1'>
                     <Layout style={styles.layout}>
                         <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Surficial Marker Data as of {moment().format("MMMM D, YYYY")}</Text>
                     </Layout>
@@ -182,7 +158,7 @@ const SurficialData = () => {
                             </Layout>
                         </View>
                     </KeyboardAvoidingView>
-                </Layout>
+                </Layout> */}
             </ScrollView>
 
         </Fragment>

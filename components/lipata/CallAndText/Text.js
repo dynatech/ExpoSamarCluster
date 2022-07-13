@@ -100,7 +100,6 @@ const Messenger = () => {
         return <Icon name="navigation-outline" 
         {...{"style": {"height": 24, "marginHorizontal": 8, "tintColor": "#8f9bb3", "width": 24, transform: [{ rotate: "90deg" }]}}}
         onPress={()=> {
-            console.log("HEY")
             temp.push({
                 source: 'You',
                 mobile_no: '09605673306',

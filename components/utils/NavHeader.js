@@ -28,13 +28,6 @@ const NavHeader = (props) => {
     };
 
     const [ userName, setUserName ] = useState("");
-    
-    // useEffect(() => {
-    //     if (props.route.params) {
-    //         console.log(props.route.params.username)
-    //         // setUserName(props.route.params.username)
-    //      }
-    // }, [props])
 
     const StarIcon = (props) => (
         <Icon {...props} fill='white' name='archive-outline'/>

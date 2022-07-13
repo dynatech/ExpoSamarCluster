@@ -6,9 +6,11 @@ import ScreenHeader from '../../utils/ScreenHeader';
 import Modal from 'react-native-modal';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
 const ActivitySchedule = () => {
+    const [openCalendar, setOpenCalendar] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
     const [openForm, setOpenForm] = useState(false);
     const [datetimestamp, setDateTimestamp] = useState(new Date());
@@ -18,6 +20,10 @@ const ActivitySchedule = () => {
 
     const CalendarIcon = (props) => {
         return <Icon name="calendar-outline" {...props} onPress={()=> ToggleDateTimestamp()}/>
+    }
+
+    const ToggleDateTimestamp = () => {
+        setOpenCalendar(!openCalendar);
     }
 
     const CameraIcon = (props) => {
@@ -299,6 +305,19 @@ const ActivitySchedule = () => {
                     </ScrollView>
                 </Card>
             </Mod>
+            <DatePicker
+                modal
+                mode={"date"}
+                open={openCalendar}
+                date={datetimestamp}
+                onConfirm={(date) => {
+                    setOpenCalendar(false);
+                    setDateTimestamp(date);
+                }}
+                onCancel={() => {
+                    setOpenCalendar(false)
+                }}
+            />
             <Modal isVisible={openImageViewer} 
                                 onBackdropPress={()=> {
                                     setOpenImageViewer(false)}}
