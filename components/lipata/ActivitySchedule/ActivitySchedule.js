@@ -51,7 +51,11 @@ const ActivitySchedule = () => {
     }
 
     const CameraIcon = (props) => {
-        return <Icon name="camera-outline" {...{"style": {"height": 50, "marginHorizontal": 10, "tintColor": "#32bbf8", "width": 50}}}/>
+        return <Icon name="camera-outline" {...{"style": {"height": 40, "marginHorizontal": 10, "tintColor": "#32bbf8", "width": 40}}}/>
+    }
+
+    const ImageIcon = (props) => {
+        return <Icon name="image-outline" {...{"style": {"height": 40, "marginHorizontal": 10, "tintColor": "#32bbf8", "width": 40}}}/>
     }
 
     const handleImageViewer = (img_path) => {
@@ -119,6 +123,37 @@ const ActivitySchedule = () => {
         } catch (err) {
             console.warn(err);
         }
+    }
+
+    const BrowseImage = async () => {
+        let options = {
+            title: 'Select Image',
+            customButtons: [
+              { 
+                name: 'customOptionKey', 
+                title: 'Choose file from Custom Option' 
+              },
+            ],
+            storageOptions: {
+              skipBackup: true,
+              path: 'images',
+            },
+            saveToPhotos: true
+        };
+        
+        launchImageLibrary(options, (res) => {
+            if (res.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (res.error) {
+                console.log('ImagePicker Error: ', res.error);
+            } else if (res.customButton) {
+                console.log('User tapped custom button: ', res.customButton);
+                alert(res.customButton);
+            } else {
+                const source = { uri: res.uri };
+                setImageFiles([...imageFiles, res.assets[0]]);
+            }
+        });
     }
 
     return(
@@ -247,7 +282,7 @@ const ActivitySchedule = () => {
                     <ScrollView>
                         <Layout style={{justifyContent: 'center', paddingBottom: 60}}>
                             <Layout style={{flexDirection: 'row'}}>
-                                <Layout style={{flex: 0.8}}>
+                                <Layout style={{flex: 0.7}}>
                                     <Input
                                         style={styles.input}
                                         placeholder='Hal. XXXYYYZZZ'
@@ -255,20 +290,27 @@ const ActivitySchedule = () => {
                                         label={evaProps => <Text {...evaProps}>Petsa at Oras</Text>}
                                         caption={evaProps => <Text {...evaProps}>Required</Text>}
                                         accessoryRight={CalendarIcon}
-                                        // onChangeText={(e) => {
-                                        //     console.log(e);
-                                        // }}
-                                        // onBlur={handleBlur('household_head')}
                                     />
                                 </Layout>
-                                <Layout style={{flex: 0.2}}>
-                                    <Button
-                                        appearance='ghost'
-                                        status='info'
-                                        style={styles.button}
-                                        accessoryRight={CameraIcon} onPress={()=> {
-                                            initializeCamera();
-                                    }}/>
+                                <Layout style={{flex: 0.3, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Layout>
+                                        <Button
+                                            appearance='ghost'
+                                            status='info'
+                                            style={styles.button}
+                                            accessoryRight={CameraIcon} onPress={()=> {
+                                                initializeCamera();
+                                        }}/>
+                                    </Layout>
+                                    <Layout>
+                                        <Button
+                                            appearance='ghost'
+                                            status='info'
+                                            style={styles.button}
+                                            accessoryRight={ImageIcon} onPress={()=> {
+                                                BrowseImage();
+                                        }}/>
+                                    </Layout>
                                 </Layout>
                             </Layout>
                             <Layout>
@@ -438,8 +480,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        height: 75,
-        width: 75
+        height: 50,
+        width: 50
     },
     backdrop: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
