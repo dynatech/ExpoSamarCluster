@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { StyleSheet, Dimensions, Linking, View } from 'react-native';
 import { Layout, Button, Divider, List, ListItem, Icon, Input, Text, Modal, Card, Select, SelectItem,} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -34,16 +35,24 @@ const Call = (props) => {
     }
 
     const renderItem = ({ item, index }) => (
-        <ListItem
-            key={index}
-            title={`${item.name} ${index + 1}`}
-            description={`${item.mobile_no}`}
-            onPress={()=> {
-            setIsUpdate(true);
-            setShowContactDetail(true);
-            setTempName(`${item.name} ${index + 1}`)
-          }}
-        />
+        <Layout level='1'>
+            <TouchableOpacity style={{width: '100%', padding: 10}} onPress={()=> {
+                setIsUpdate(true);
+                setShowContactDetail(true);
+                setTempName(`${item.name} ${index + 1}`)
+            }}>
+                <Layout>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                        {`${item.name} ${index + 1}`}
+                    </Text>
+                </Layout>
+                <Layout>
+                    <Text category="c1">
+                        {`${item.name} ${index + 1}`}
+                    </Text>
+                </Layout>
+            </TouchableOpacity>
+        </Layout>
     );
 
     const eraseLast = () => {
