@@ -72,6 +72,9 @@ const Call = (props) => {
                         value={`${mobileNumber}`}
                         accessoryRight={DialIcon}
                         maxLength={11}
+                        textStyle={{
+                            fontSize: 50
+                        }}
                         // onChangeText={handleChange('household_head')}
                         // onBlur={handleBlur('household_head')}
                     />
@@ -320,7 +323,7 @@ const styles = StyleSheet.create({
         padding: 20,
         margin: 0,
         textAlign: 'center',
-        width: '100%'
+        width: '100%',
     },
     buttonGroup: {
         paddingRight: 50,
