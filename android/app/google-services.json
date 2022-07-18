@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "174839201761",
+    "project_id": "lipata-demo-768d7",
+    "storage_bucket": "lipata-demo-768d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174839201761:android:b7d983d442588ec0169ca0",
+        "android_client_info": {
+          "package_name": "com.jgeliberte.ExpoSamarCluster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174839201761-nchq4gfsmn3f5pkb90hqiqv8q6no0eqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-dr4ePYq4JjIHzIYstd9gXvTCUzJdf5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "174839201761-nchq4gfsmn3f5pkb90hqiqv8q6no0eqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
