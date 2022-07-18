@@ -12,6 +12,14 @@ import MobileCaching  from './components/utils/MobileCaching';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 const App = () => {
 
   LogBox.ignoreAllLogs()
@@ -34,12 +42,12 @@ const App = () => {
   // Can only be tested on an actual device
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => {
-      console.log("token:", token);
       setExpoPushToken(token)
     });
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
+      // schedulePushNotification(notification.request.content)
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
@@ -82,6 +90,17 @@ const App = () => {
       });
     }
   };
+
+  const schedulePushNotification = async (data) => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: data.title,
+        body: data.body,
+        data: { data: 'goes here' },
+      },
+      trigger: { seconds: 1 },
+    });
+  }
 
   return (
     <>

@@ -296,6 +296,7 @@ dependencies {
     implementation "com.google.firebase:firebase-firestore"
     implementation "com.google.firebase:firebase-messaging"
     implementation "com.google.firebase:firebase-iid"
+    implementation "com.google.firebase:firebase-inappmessaging-display"
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
