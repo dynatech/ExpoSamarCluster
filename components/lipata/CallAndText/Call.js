@@ -133,22 +133,22 @@ const Call = (props) => {
                             />
                         </Layout>
                         <Layout>
-                            <Button status="info" style={{margin: 20}} accessoryLeft={AddContactIcon}>
+                            <Button status="info" style={{margin: 20, height: SCREEN_HEIGHT * .05}} accessoryLeft={AddContactIcon}>
                                 <Text>{isUpdate === true ? "Save Contact" : "Update Contact"}</Text>
                             </Button>
                         </Layout>
                         <Layout>
-                            <Button style={{margin: 20, backgroundColor: '#17b942'}} 
+                            <Button style={{margin: 20, backgroundColor: '#17b942', height: SCREEN_HEIGHT * .05}} 
                                 accessoryLeft={CallIcon} 
                                 onPress={()=> Linking.openURL(`tel:${mobileNumber}`)}>
                                 <Text>{`Call ${tempName}`}</Text>
                             </Button>
                         </Layout>
-                        <Layout style={{flexDirection: 'row'}}>
-                            <Button status="warning" style={{margin: 20, width: '38%'}} accessoryLeft={SMSIcon} onPress={()=> Linking.openURL(`sms:?addresses=${mobileNumber}&body=`)}>
+                        <Layout style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Button status="warning" style={{margin: 20, width: '45%'}} accessoryLeft={SMSIcon} onPress={()=> Linking.openURL(`sms:?addresses=${mobileNumber}&body=`)}>
                                 <Text>{`via SMS`}</Text>
                             </Button>
-                            <Button status="warning" style={{margin: 20, width: '38%'}} accessoryLeft={ChatIcon} onPress={()=> {
+                            <Button status="warning" style={{margin: 20, width: '45%'}} accessoryLeft={ChatIcon} onPress={()=> {
                                 props.navigation.navigate('Text');
                                 setShowContactDetail(false);
                             }}>
@@ -164,11 +164,11 @@ const Call = (props) => {
 }
 
 const AddContactIcon = () => {
-    return <Icon name="person-add-outline" {...{"style": {"height": SCREEN_WIDTH * .11, "tintColor": "#fff", "width": SCREEN_WIDTH * .11}}} onPress={()=> {}}/>
+    return <Icon name="person-add-outline" {...{"style": {"height": SCREEN_WIDTH * .06, "tintColor": "#fff", "width": SCREEN_WIDTH * .11}}} onPress={()=> {}}/>
 }
 
 const CallIcon = (props) => {
-    return <Icon name="phone-call-outline" {...{"style": {"height": SCREEN_WIDTH * .09, "tintColor": "#fff", "width": SCREEN_WIDTH * .09}}} onPress={()=> {}}/>
+    return <Icon name="phone-call-outline" {...{"style": {"height": SCREEN_WIDTH * .05, "tintColor": "#fff", "width": SCREEN_WIDTH * .09}}} onPress={()=> {}}/>
 }
 
 const SMSIcon = (props) => {
@@ -228,9 +228,17 @@ const DialPad = (props) => {
 
         <TouchableOpacity key="dial-call" style={styles.dial_key} onPress={()=> {
             Linking.openURL(`tel:${mobileNumber}`)
+            console.log("touchableOpcatity press")
+            
         }}>
-            <View style={[styles.dialpad_button_symbol, {backgroundColor: '#17b942'}]}> 
-                <CallIcon key="dialkey-call"/>
+            <View style={[styles.dialpad_button_symbol, {backgroundColor: '#17b942'}]} onPress={()=> {
+                Linking.openURL(`tel:${mobileNumber}`)
+                console.log("View press")
+            }}> 
+                <CallIcon key="dialkey-call" onPress={()=> {
+                Linking.openURL(`tel:${mobileNumber}`)
+                console.log("Icon press")
+            }}/>
             </View>
 
         </TouchableOpacity>
@@ -260,7 +268,6 @@ const styles = StyleSheet.create({
     },
     dialpad_layout: {
         // flex: 1,
-        
     },
     contact_list_layout: {
         flex: 1,
@@ -307,7 +314,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        paddingTop: SCREEN_HEIGHT * .05,
     },
     text: {
         fontSize: SCREEN_WIDTH * .07,
