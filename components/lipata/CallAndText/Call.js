@@ -73,7 +73,7 @@ const Call = (props) => {
                         accessoryRight={DialIcon}
                         maxLength={11}
                         textStyle={{
-                            fontSize: 50
+                            fontSize: SCREEN_WIDTH * .05
                         }}
                         // onChangeText={handleChange('household_head')}
                         // onBlur={handleBlur('household_head')}
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     },
     dial_format: {
         flex: 1,
-        width: '85%',
+        width: '75%',
         height: '80%',
         flexDirection: 'row',
         flexWrap: 'wrap',
