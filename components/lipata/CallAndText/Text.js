@@ -159,7 +159,7 @@ const Messenger = () => {
                             multiline
                             style={[{maxWidth: SCREEN_WIDTH - 20, minWidth: SCREEN_WIDTH - 20, paddingLeft: 10, paddingRight: 10, }]}
                             textStyle={{ justifyContent: 'center', padding: 10, maxHeight: 100}}
-                            placeholder='E.g. (63)9123456789'
+                            placeholder='Type your message here...'
                             value={message}
                             accessoryRight={()=> SendIcon(message, setMessage, setConversation, conversation)}
                             accessoryLeft={AttachIcon}
@@ -180,25 +180,35 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: 10
     },
     recipient_section: {
-        flex: 0.10
+        flex: 0.1,
+        // backgroundColor: 'green'
     },
     thread_section: {
-        flex: 0.70,
+        flex: 0.90,
+        // backgroundColor: 'pink',
+        // height: '100%'
+        
     },
     message_content: {
-        width: SCREEN_WIDTH - 40,
-        backgroundColor: 'rgba(0,0,0,0)'
+        // flex: 1,
+        width: SCREEN_WIDTH * .95,
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0)',
+        // backgroundColor: 'yellow',
+        margin: 10
     },
     command_section: {
-        flex: 0.20
+        flex: 0.1,
+        justifyContent: 'center',
+        // backgroundColor: 'yellow',
     },
     layout: {
-      flex: 1,
+    //   flex: 1,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     text: {
         fontSize: 25

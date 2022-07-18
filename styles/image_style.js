@@ -15,8 +15,8 @@ const ImageStyle = StyleSheet.create({
       width: width * 0.23,
    },
    dashboard_menu_icon: {
-      height: 120,
-      width: 120,
+      height: width * 0.33,
+      width: width * 0.33,
    },
    alert_level_image: {
       height: 150,

@@ -1,7 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import { Layout, Text} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScreenHeader = (props) => {
     const { title } = props;
@@ -50,8 +53,8 @@ const ScreenHeader = (props) => {
             {
                 headerIcon ? 
                     <Fragment>
-                        <View style={{flex: 0.3, paddingLeft: 20, justifyContent: 'center', alignItems: 'center'}}>
-                            <Image style={ImageStyle.header_icon} source={headerIcon}></Image>
+                        <View style={styles.headerIcon}>
+                            <Image style={[ImageStyle.header_icon, styles.imageIcon]} source={headerIcon}></Image>
                             <Text style={styles.iconLabel} category='c1'>{iconLabel}</Text>
                         </View>
                         <View style={{flex: 0.7}}>
@@ -73,17 +76,26 @@ export default ScreenHeader;
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        height: 150,
+        height: '25%',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 10,
+    },
+    headerIcon: {
+        flex: 0.3, 
+        paddingLeft: 20, 
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    imageIcon: {
+        height: SCREEN_WIDTH * .25,
+        width: SCREEN_WIDTH * .25,
     },
     text: {
-        fontSize: 30,
-        paddingLeft: 10
+        fontSize: SCREEN_WIDTH * .07,
+        paddingLeft: 15
     },
     iconLabel: {
-        fontSize: 12,
+        fontSize: SCREEN_WIDTH * .03,
         paddingTop: 5,
         textAlign: 'center'
     }

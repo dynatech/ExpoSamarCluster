@@ -1,10 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Image, StyleSheet, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Alert, KeyboardAvoidingView, Dimensions } from 'react-native';
 import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import NavHeader from '../utils/NavHeader';
 import SiteSummary from '../utils/SiteSummary';
 import MobileCaching  from '../utils/MobileCaching';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const LipataDashboard = (props) => {
     const StackNavigator = props.navigation;
@@ -70,11 +73,11 @@ const LipataDashboard = (props) => {
                 <SiteSummary userName={userName}/>
                 <Layout style={styles.container} level='1'>
                     <Layout style={styles.layout} level='1'>
-                        <Layout style={[styles.container, {paddingTop: 42}]} level='1'>
+                        <Layout style={styles.container} level='1'>
                             <TouchableOpacity style={styles.menu} onPress={() => { StackNavigator.navigate("CRATabStack") }}>
                                 <Image style={ImageStyle.dashboard_menu_icon} source={require('../../assets/CRA-originalpallete-Square.png')}></Image>
                             </TouchableOpacity>
-                            <Text category='p2' style={styles.textMenu}>Community Risk {"\n"}Assessment</Text>
+                            <Text category='p2' style={styles.textMenu}>Community Risk Assessment</Text>
                         </Layout>
                         <Layout style={styles.container} level='1'>
                             <TouchableOpacity style={styles.menu} onPress={() => { StackNavigator.navigate("SurficialMonitoringStack") }}>
@@ -138,10 +141,11 @@ const styles = StyleSheet.create({
     },
     menu: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     textMenu: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: SCREEN_WIDTH * .029
     }, 
     input: {
         padding: 20,
