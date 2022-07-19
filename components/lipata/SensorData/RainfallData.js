@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     layout: {
       flex: 1,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+
     },
     image_container: {
         flex: 7, 
