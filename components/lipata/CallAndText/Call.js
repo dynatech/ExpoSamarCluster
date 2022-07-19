@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react';
-import { StyleSheet, Dimensions, Linking, View } from 'react-native';
+import { StyleSheet, Dimensions, Linking, View, TouchableOpacity } from 'react-native';
 import { Layout, Button, Divider, List, ListItem, Icon, Input, Text, Modal, Card, Select, SelectItem,} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
