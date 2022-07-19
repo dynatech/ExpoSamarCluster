@@ -133,22 +133,22 @@ const Call = (props) => {
                             />
                         </Layout>
                         <Layout>
-                            <Button status="info" style={{margin: 20, height: SCREEN_HEIGHT * .05}} accessoryLeft={AddContactIcon}>
+                            <Button status="info" style={{marginTop: 20, height: 60}} accessoryLeft={AddContactIcon}>
                                 <Text>{isUpdate === true ? "Save Contact" : "Update Contact"}</Text>
                             </Button>
                         </Layout>
                         <Layout>
-                            <Button style={{margin: 20, backgroundColor: '#17b942', height: SCREEN_HEIGHT * .05}} 
+                            <Button style={{marginTop: 20, backgroundColor: '#17b942', height: 60}} 
                                 accessoryLeft={CallIcon} 
                                 onPress={()=> Linking.openURL(`tel:${mobileNumber}`)}>
                                 <Text>{`Call ${tempName}`}</Text>
                             </Button>
                         </Layout>
-                        <Layout style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button status="warning" style={{margin: 20, width: '45%'}} accessoryLeft={SMSIcon} onPress={()=> Linking.openURL(`sms:?addresses=${mobileNumber}&body=`)}>
+                        <Layout style={{flexDirection: 'row', justifyContent: 'space-between', maxWidth: SCREEN_WIDTH}}>
+                            <Button status="warning" style={{marginTop: 20, marginRight: 5, width: '47%'}} accessoryLeft={SMSIcon} onPress={()=> Linking.openURL(`sms:?addresses=${mobileNumber}&body=`)}>
                                 <Text>{`via SMS`}</Text>
                             </Button>
-                            <Button status="warning" style={{margin: 20, width: '45%'}} accessoryLeft={ChatIcon} onPress={()=> {
+                            <Button status="warning" style={{marginTop: 20, marginLeft: 5, width: '47%'}} accessoryLeft={ChatIcon} onPress={()=> {
                                 props.navigation.navigate('Text');
                                 setShowContactDetail(false);
                             }}>
@@ -164,19 +164,19 @@ const Call = (props) => {
 }
 
 const AddContactIcon = () => {
-    return <Icon name="person-add-outline" {...{"style": {"height": SCREEN_WIDTH * .06, "tintColor": "#fff", "width": SCREEN_WIDTH * .11}}} onPress={()=> {}}/>
+    return <Icon name="person-add-outline" {...{"style": {"height": 45, "tintColor": "#fff", "width": 45}}} onPress={()=> {}}/>
 }
 
 const CallIcon = (props) => {
-    return <Icon name="phone-call-outline" {...{"style": {"height": SCREEN_WIDTH * .05, "tintColor": "#fff", "width": SCREEN_WIDTH * .09}}} onPress={()=> {}}/>
+    return <Icon name="phone-call-outline" {...{"style": {"height": 45, "tintColor": "#fff", "width": 40}}} onPress={()=> {}}/>
 }
 
 const SMSIcon = (props) => {
-    return <Icon name="message-square-outline" {...props} onPress={()=> {}}/>
+    return <Icon name="message-square-outline" {...{"style": {"height": 35, "tintColor": "#fff", "width": 40}}} onPress={()=> {}}/>
 }
 
 const ChatIcon = (props) => {
-    return <Icon name="message-circle-outline" {...props} onPress={()=> {}}/>
+    return <Icon name="message-circle-outline" {...{"style": {"height": 35, "tintColor": "#fff", "width": 40}}} onPress={()=> {}}/>
 }
 
 const DialPad = (props) => {
@@ -314,6 +314,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
+    },
+    addContact:{
+
+        backgroundColor: 'pink'
     },
     text: {
         fontSize: SCREEN_WIDTH * .07,
