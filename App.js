@@ -42,6 +42,7 @@ const App = () => {
   // Can only be tested on an actual device
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => {
+      console.log("token:", token);
       setExpoPushToken(token)
     });
 

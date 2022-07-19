@@ -264,7 +264,7 @@ const RainfallGraph = (props) => {
 
     useEffect(()=> {
         if (graphs.length != 0 && props.selectedGaugeName.length != 0) {
-            let graph = graphs.filter(o => o.gauge_name == props.selectedGaugeName);
+            let graph = graphs.filter(o => o.gauge_name == props.selectedGaugeName.split(" ")[0]);
             let option = graph.find(o => o.graph_view == props.selectedViewIndex);
             setDataGraph(option)
         }
