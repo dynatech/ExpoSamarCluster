@@ -67,7 +67,7 @@ const Messenger = () => {
                         <Text category="h6" style={{textAlign: 'right'}}>{item.source}</Text>
                     </View>
                     <View>
-                        <Text category="p1" style={{textAlign: 'right'}}>{item.content}</Text>
+                        <Text category="p1" style={{textAlign: 'left'}}>{item.content}</Text>
                     </View>
                     <View>
                         <Text category="c1" style={{textAlign: 'right'}}>{item.ts}</Text>

@@ -1,10 +1,14 @@
 import React, { Fragment, useState } from 'react';
-import { StyleSheet, Image, ScrollView } from 'react-native';
+import { StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { Layout, Text, Button} from '@ui-kitten/components';
 import ScreenHeader from '../../utils/ScreenHeader';
 import { ImageStyle } from '../../../styles/image_style';
 import CustomConfirm from '../../utils/CustomConfirm';
 import moment from 'moment';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 
 const data = {
     
@@ -118,6 +122,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
+        height: SCREEN_HEIGHT * 1
     },
     alert_content_section: {
         padding: 40,
@@ -142,7 +147,8 @@ const styles = StyleSheet.create({
     layout: {
       flex: 1,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+    //   backgroundColor: 'pink'
     },
     text: {
         // textAlign: 'center',
