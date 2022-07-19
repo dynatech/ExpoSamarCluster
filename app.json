@@ -24,10 +24,11 @@
       "googleServicesFile": "./android/app/google-services.json",
       "useNextNotificationsApi": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/appicon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.jgeliberte.ExpoSamarCluster"
+      "package": "com.jgeliberte.ExpoSamarCluster",
+      "icon": "./assets/appicon.png"
     },
     "web": {
       "favicon": "./assets/favicon.png"
