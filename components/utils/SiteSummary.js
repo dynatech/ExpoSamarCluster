@@ -1,10 +1,13 @@
 import React, {useRef, useEffect, useState} from 'react';
-import { StyleSheet, TouchableOpacity} from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import { Layout, Text} from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
 import moment from 'moment';
 import axios from 'axios';
 import Config from 'react-native-config';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const SiteSummary = (props) => {
     
@@ -63,10 +66,12 @@ const styles = StyleSheet.create({
     },
     text: {
         // textAlign: 'center',
-        fontSize: 25
+        // fontSize: 25
+        fontSize: SCREEN_HEIGHT * 0.025
     },
     ts: {
-        fontSize: 15
+        // fontSize: 15
+        fontSize: SCREEN_HEIGHT * 0.017
     },
     input: {
         padding: 20,

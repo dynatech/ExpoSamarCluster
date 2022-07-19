@@ -14,7 +14,7 @@ const Call = (props) => {
     const [isUpdate, setIsUpdate] = useState(false);
     const [tempName, setTempName] = useState(null); // For testing purposes only
 
-    const data = new Array(14).fill({
+    const data = new Array(20).fill({
         name: 'Mang boy',
         mobile_no: '+(63) 9123456789',
     });
@@ -36,18 +36,18 @@ const Call = (props) => {
 
     const renderItem = ({ item, index }) => (
         <Layout level='1'>
-            <TouchableOpacity style={{width: '100%', padding: 10}} onPress={()=> {
+            <TouchableOpacity style={{width: '100%', padding: 10}} key={`contact-${index}`} onPress={()=> {
                 setIsUpdate(true);
                 setShowContactDetail(true);
                 setTempName(`${item.name} ${index + 1}`)
             }}>
                 <Layout>
-                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                    <Text style={styles.contact_list_name}>
                         {`${item.name} ${index + 1}`}
                     </Text>
                 </Layout>
                 <Layout>
-                    <Text category="c1">
+                    <Text style={styles.contact_list_number}>
                         {`${item.name} ${index + 1}`}
                     </Text>
                 </Layout>
@@ -161,12 +161,12 @@ const Call = (props) => {
     )
 }
 
-const AddContactIcon = (props) => {
-    return <Icon name="person-add-outline" {...props} onPress={()=> {}}/>
+const AddContactIcon = () => {
+    return <Icon name="person-add-outline" {...{"style": {"height": SCREEN_WIDTH * .11, "tintColor": "#fff", "width": SCREEN_WIDTH * .11}}} onPress={()=> {}}/>
 }
 
 const CallIcon = (props) => {
-    return <Icon name="phone-call-outline" {...props} onPress={()=> {}}/>
+    return <Icon name="phone-call-outline" {...{"style": {"height": SCREEN_WIDTH * .09, "tintColor": "#fff", "width": SCREEN_WIDTH * .09}}} onPress={()=> {}}/>
 }
 
 const SMSIcon = (props) => {
@@ -184,31 +184,58 @@ const DialPad = (props) => {
     let key_pad = [];
     data.forEach((element, index) => {
         key_pad.push(            
-            <Button key={index+1} style={styles.dial_key} onPress={()=> {
+            <TouchableOpacity key={`numpad-${index+1}`} style={styles.dial_key} onPress={()=> {
                 if (mobileNumber.length < 12) {
                     setMobileNumber(`${mobileNumber}${index+1}`);
                 }
             }}>
-                <Text style={styles.dial_key}>{index + 1}</Text>
-            </Button>
+                <View style={styles.dialpad_button}>
+                    <Text style={styles.text} key={`numkey-${index}`}>{index + 1}</Text>
+                </View>
+            </TouchableOpacity>
         )
     })
-    key_pad.push(<Button key="add" status="warning" style={[styles.dial_key]} accessoryLeft={AddContactIcon} onPress={()=> {
-        if (mobileNumber.length >= 7) {
-            setIsUpdate(false)
-            setShowContactDetail(true)
-            setTempName("NEW")
-        }
-    }}></Button>)
-    key_pad.push(<Button key="0" style={styles.dial_key} onPress={()=> {
-        setMobileNumber(`${mobileNumber}0`);
-    }}><Text style={styles.dial_key}>0</Text></Button>)
-    key_pad.push(<Button key="dial-call" style={[styles.dial_key, {backgroundColor: '#17b942'}]} onPress={()=> {
-        Linking.openURL(`tel:${mobileNumber}`)
-    }} accessoryLeft={CallIcon}>
-    </Button>)
+    key_pad.push(
+
+        <TouchableOpacity key="dial-addContact" style={styles.dial_key} onPress={()=> {
+            if (mobileNumber.length >= 7) {
+                setIsUpdate(false)
+                setShowContactDetail(true)
+                setTempName("NEW")
+            }
+        }}>
+            <View style={[styles.dialpad_button_symbol, {backgroundColor: '#DBA400'}]}> 
+                <AddContactIcon key="dialkey-addContact"/>
+            </View>
+
+        </TouchableOpacity>
+    )
+        
+    key_pad.push(
+        <TouchableOpacity key="0" style={styles.dial_key} 
+            onPress={()=> {
+                setMobileNumber(`${mobileNumber}0`);
+            }}>
+            <View style={styles.dialpad_button}>
+                    <Text style={styles.text} key="key-0">0</Text>
+            </View>
+        </TouchableOpacity>
+    )
+    
+    key_pad.push(
+
+        <TouchableOpacity key="dial-call" style={styles.dial_key} onPress={()=> {
+            Linking.openURL(`tel:${mobileNumber}`)
+        }}>
+            <View style={[styles.dialpad_button_symbol, {backgroundColor: '#17b942'}]}> 
+                <CallIcon key="dialkey-call"/>
+            </View>
+
+        </TouchableOpacity>
+    )
+    
     let return_value = [
-        <Layout style={styles.dial_format}>
+        <Layout style={styles.dial_format} key="dialpad container">
             {key_pad}
         </Layout>
     ]
@@ -220,42 +247,72 @@ export default Call;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
+        // alignItems: 'center',
+        padding: SCREEN_WIDTH * .02,
+        width: '100%',
     },
     layout: {
       flex: 1,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     dialpad_layout: {
-        flex: 0.15,
+        // flex: 1,
+        
     },
     contact_list_layout: {
-        flex: 0.85,
+        flex: 1,
     },
     contact_list: {
-        width: SCREEN_WIDTH - 40,
-        maxHeight: SCREEN_HEIGHT - 20,
+
+    },
+    contact_list_name: {
+        // fontSize: SCREEN_HEIGHT * .025,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    contact_list_number: {
+        // fontSize: SCREEN_HEIGHT * .017
+        fontSize: 15
     },
     dial_key: {
-        width: 75,
-        height: 75,
-        borderRadius: 50,
-        margin: 10,
+        width: SCREEN_WIDTH * .2,
+        height: SCREEN_WIDTH * .2,
+        borderRadius: 100,
+        margin: '2%',
+        backgroundColor: '#181f34',
     },
-    dial_format: {
-        flex: 0.85,
-        width: '79%',
-        textAlign: 'center',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+    dialpad_button: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        height: '100%', 
+        width: '100%'
+    },
+    dialpad_button_symbol: {
+        flex: 1,
+        justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
+        borderRadius: 100,
+    },
+    dial_format: {
+        flex: 1,
+        width: '85%',
+        height: '80%',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        paddingTop: SCREEN_HEIGHT * .05,
     },
     text: {
-        fontSize: 25
+        fontSize: SCREEN_WIDTH * .07,
+        alignSelf: 'center'
+    },
+    text_symbol: {
+
     },
     ts: {
         fontSize: 15
@@ -271,7 +328,7 @@ const styles = StyleSheet.create({
         paddingLeft: 50,
         textAlign: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     backdrop: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

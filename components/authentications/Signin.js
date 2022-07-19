@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Image, StyleSheet, View, ScrollView, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
+import { Image, StyleSheet, View, ScrollView, KeyboardAvoidingView, PermissionsAndroid, Dimensions } from 'react-native';
 import { Layout, Text, Input, Button} from '@ui-kitten/components';
 import { ImageStyle } from '../../styles/image_style';
 import { Formik } from 'formik';
@@ -8,6 +8,9 @@ import CustomLoading from '../utils/CustomLoading';
 import MobileCaching from '../utils/MobileCaching';
 import axios from 'axios';
 import Config from 'react-native-config';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Signin = (props) => {
     const StackNavigator = props.navigation;
@@ -47,7 +50,7 @@ const Signin = (props) => {
             <KeyboardAvoidingView
                 style={{height: '100%'}}
             >
-            <ScrollView>
+            <ScrollView contentContainerStyle={{flexGrow: .5, justifyContent: 'center', flexDirection: 'column'}}>
                 <Layout style={styles.layout}>
                     <Image style={ImageStyle.seal} source={require('../../assets/dost_seal_contrast.png')}></Image>
                     <Image style={ImageStyle.seal} source={require('../../assets/dynaslope_seal_contrast.png')}></Image>
@@ -56,7 +59,7 @@ const Signin = (props) => {
                     <Image style={ImageStyle.seal} source={require('../../assets/dynaslope_seal_contrast.png')}></Image>
                     <Image style={ImageStyle.seal} source={require('../../assets/dynaslope_seal_contrast.png')}></Image>
                 </Layout>
-                <Layout style={[styles.container, {paddingTop: 25}]}>
+                <Layout style={[styles.container, {paddingTop: 20}]}>
                     <View>
                         <Text style={styles.text} category='h1'>COMMUNITY-BASED EARLY WARNING SYSTEM FOR LANDSLIDES</Text>
                     </View>
@@ -154,7 +157,7 @@ export default Signin;
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 10
+      padding: 10,
     },
     layout: {
       flex: 1,
@@ -164,12 +167,13 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 25
+        fontSize: SCREEN_HEIGHT * .03
     },
     input: {
         padding: 20,
         margin: 0,
         textAlign: 'center'
+        // fontSize: SCREEN_HEIGHT * .029
     },
     buttonGroup: {
         paddingRight: 50,
