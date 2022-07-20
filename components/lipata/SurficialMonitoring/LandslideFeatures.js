@@ -307,12 +307,12 @@ const LandslideFeatures = () => {
                                 setDisplayConfirm(true);
                             }}>Submit</Button>
                         </View>
-                        <View>
+                        <View styles={{justifyContent: 'space-between'}}>
                             <View style={{flexDirection: 'row', padding: 20}}>
                                 <Text style={{textAlign: 'center', width: '100%'}} category="h6" status="basic">Manifestation of Movement Observations</Text>
                             </View>
-                            <ScrollView horizontal={true}>
-                                <View style={{width: 600, backgroundColor: '#ffffff20'}}>
+                            <ScrollView horizontal={true} style={{alignContent: 'center'}}>
+                                <View style={{minWidth: screenWidth * .95, margin: 10, backgroundColor: '#ffffff20'}}>
                                     <DataTable>
                                         <DataTable.Header>
                                             <DataTable.Title ><Text style={{color: 'white'}}>Petsa at Oras</Text></DataTable.Title>
@@ -412,16 +412,16 @@ export default LandslideFeatures;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         padding: 20,
     },
     input_container: {
-        flex: 1,
-        width: screenWidth * .9
+        // flex: 1,
+        // width: screenWidth * .9
     },
     layout: {
-      flex: 1,
+    //   flex: 1,
       flexDirection: 'row',
       flexWrap: 'wrap'
     },

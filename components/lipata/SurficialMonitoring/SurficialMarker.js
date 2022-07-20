@@ -54,7 +54,7 @@ const SurficialMarker = () => {
                     <Layout style={styles.input_container}>
                         <View>
                             <Input
-                                style={styles.input}
+                                style={styles.input_group}
                                 placeholder='E.g. XXXYYYZZZ'
                                 value={moment(datetimestamp).format("YYYY-MM-DD hh:mm A")}
                                 label={evaProps => <Text {...evaProps}>Petsa at Oras ng pagsukat</Text>}
@@ -64,7 +64,7 @@ const SurficialMarker = () => {
                                 // onBlur={handleBlur('household_head')}
                             />
                         </View>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                        <View>
                             {
                                 marker_names.map((row, index)=>(
                                     <Input
@@ -90,7 +90,7 @@ const SurficialMarker = () => {
                         </View>
                         <View >
                             <Select
-                                style={{paddingLeft: 20, paddingRight: 20}}
+                                style={styles.input_group}
                                 placeholder="             "
                                 label={evaProps => 
                                 <Text {...evaProps}>Panahon</Text>}
@@ -107,7 +107,7 @@ const SurficialMarker = () => {
                         </View>
                         <View >
                             <Input
-                                style={styles.input}
+                                style={styles.input_group}
                                 placeholder='Hal. Johann Sahagun'
                                 value={reporter}
                                 label={evaProps => <Text {...evaProps}>Pangalan ng mga nagsukat</Text>}
@@ -158,10 +158,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        // backgroundColor: 'pink'
     },
     input_container: {
-        flex: 1,
-        width: screenWidth * .9
+        // flex: 1,
+        // width: screenWidth * .9
     },
     layout: {
       flex: 1,
@@ -182,10 +183,8 @@ const styles = StyleSheet.create({
     },
     input_group: {
         width: screenWidth * .85,
-        paddingLeft: 20,
-        paddingBottom: 20,
-        margin: 0,
-        textAlign: 'center',
+        // paddingLeft: 20,
+        marginBottom: 20,
     },
     buttonGroup: {
         paddingRight: 50,
