@@ -16,26 +16,26 @@ const SurficialData = () => {
         <Fragment>
             <ScreenHeader title="Surficial Data"/>
             <ScrollView>
-                <Layout level="1" style={{height: SCREEN_HEIGHT * .95, paddingBottom: 20}}>
-                    <Layout style={styles.container} level="1">
+                <Layout level="1" style={{minHeight: SCREEN_HEIGHT, paddingBottom: 30}}>
+                    <Layout style={[styles.container, {flex: .4}]} level="1">
                         <Layout style={styles.layout}>
                             <Text category="p1" style={{textAlign: 'center'}}>Latest Surficial Data for Brgy. Lipata, Paranas, Samar as of {moment().format("MMMM D, YYYY h:mm A")}</Text>
                         </Layout>
                         <Layout style={styles.graph_container}>
                             <SurficialGraph data={surficialData}/>
                         </Layout>
-                        <Layout style={{padding: 10}}>
+                        <Layout style={{paddingBottom: 15}}>
                             <Button style={styles.buttonGroup} status="info" onPress={()=> {
                                 console.log("DOWNLOAD")
                             }}>Download</Button>
                         </Layout>
-                        <Layout style={{padding: 10}}>
+                        <Layout style={{paddingBottom: 10}}>
                             <Button style={styles.buttonGroup} status="primary" onPress={()=> {
                                 console.log("SHARE")
                             }}>Share</Button>
                         </Layout>
                     </Layout>
-                    <Layout style={styles.container} level="1">
+                    <Layout style={[styles.container, {flex: 1.6}]} level="1">
                         <Layout style={styles.layout}>
                             <Text category="h5" style={{textAlign: 'center', paddingBottom: 10}}>Surficial Marker Data as of {moment().format("MMMM D, YYYY")}</Text>
                         </Layout>
@@ -124,11 +124,13 @@ const styles = StyleSheet.create({
     buttonGroup: {
         paddingRight: 50,
         paddingLeft: 50,
+        width: SCREEN_WIDTH * .9
         // textAlign: 'center',
         // justifyContent: 'center',
         // alignItems: 'center'
     },
     graph_container: {
         width: SCREEN_WIDTH * .9,
+        paddingBottom: 20
     }
 });
