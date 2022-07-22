@@ -38,8 +38,8 @@ const Signup = (props) => {
 
     return(
         <Layout style={styles.container} level='1' >
-            <KeyboardAvoidingView style={{height: '100%'}}>
-                <ScrollView>
+            <KeyboardAvoidingView style={{height: '100%',}}>
+                <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', flexDirection: 'column'}}>
                 <Layout>
                     <ScreenHeader title="Sign up" />
                     <Layout>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     text: {
         textAlign: 'center',
